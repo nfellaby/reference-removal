@@ -184,7 +184,7 @@ Fungal FASTA References
 4. Spike in reference reads
 5. Test de-hosting process
 
-### Starting with Viral content only
+### Starting with long read content only
 - Transferred viral and bacterial datasets across to HPC working directory
 - Uncompress directories for bacteria and viruses. Note: Leaving fungi for the moment.
 ```
@@ -194,7 +194,7 @@ mkdir NCBI_refseq_viruses_20260731
 unzip NCBI_refseq_viruses_20260731.zip -d NCBI_refseq_viruses_20260731
 ```
 
-- Generate synthetic reads for viruses:
+- Generate synthetic long reads for viruses:
    - Create PBSim3 environment:
    ````
    mm create -n pbsim3
@@ -210,4 +210,12 @@ for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/NCBI_refseq_viruses_202607
     acc=$(basename "$fasta" .fa)
     pbsim --seed 1 --strategy wgs --method errhmm --errhmm /home/phe.gov.uk/nicholas.ellaby/micromamba/envs/pbsim3/data/ERRHMM-ONT-HQ.model --depth 10 --genome ${fasta} --prefix ${acc} --id-prefix ${acc}__ --length-mean 1000 --length-max 10000 --accuracy-mean 0.98; cat ${acc}*.fastq | pigz > ${acc}.fastq.gz
 done
+```
+- Generate synthetic long reads for bacteria
+
+```
+for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/FDA-ARGOS_bacterial_20260731/data/*/*fna; do
+    acc=$(basename "$fasta" .fa)
+    pbsim --seed 1 --strategy wgs --method errhmm --errhmm /home/phe.gov.uk/nicholas.ellaby/micromamba/envs/pbsim3/data/ERRHMM-ONT-HQ.model --depth 10 --genome ${fasta} --prefix ${acc} --id-prefix ${acc}__ --length-mean 5000 --length-max 50000 --accuracy-mean 0.98; cat ${acc}*.fastq | pigz > ${acc}.fastq.gz;
+done;
 ```
