@@ -21,16 +21,17 @@ The following datasets were canabilised from the Deacon pre-pub [paper](https://
 ## Reference Organisms for Internal Control Spike-in
 Viral:
 - Tobacco Mosaic Virus ([Adela Alcolea-Medina et al., 2025](https://www.thelancet.com/journals/lanmic/article/PIIS2666-5247(25)00102-8/fulltext))
-- Hanza Virus ([Kuiama Lewandowski et al., 2019](https://pubmed.ncbi.nlm.nih.gov/31666364/))
+- Hazara Virus ([Kuiama Lewandowski et al., 2019](https://pubmed.ncbi.nlm.nih.gov/31666364/))
 - Lambda Phage ([Jiayi Duan et al., 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC12633245/))
 - T1 Phage ([Zhangfan Fu et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10714923/))
+- Thermus thermophilus ([Zhangfan Fu et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10714923/))
 
 Bacterial FASTA References 
 - [ZymoBIOMICs references](https://www.bioscience.co.uk/cpl/zymobiomics-dna-kits?gad_source=1&gad_campaignid=21301459676&gbraid=0AAAAAD_TCRJyensW6-q0ajdbGar2qCICn&gclid=CjwKCAjwj7HTBhBiEiwA8s35OmX-N4EqACiysya4QZFb7_7QZMjsWO357qzxvQ40A8Ae7OlWGuWCbhoC0j4QAvD_BwE):
   - Imtechella halotolerans
   - Allobacillus halotolerans
   - Truepera radiovictrix
-- Thermus thermophilus ([Zhangfan Fu et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10714923/)): Thermus thermophilus and T1 phages are comparable as mNGS IC in pathogen quantitation and are both superior than artificial DNA sequences.
+
 
 
 ## Creating Reference Datasets
@@ -155,9 +156,25 @@ done;
 ### Expected outputs:
 Viral FASTA References
 - NCBI_refseq_visues_20260731.noTMV.fasta
-- NCBI_refseq_visues_20260731.noHanza.fasta
+   - Remove GCA_000854365.1
+- NCBI_refseq_visues_20260731.noHazara.fasta
+   - GCA_002831085.1
 - NCBI_refseq_visues_20260731.noLambda.fasta
+   - GCA_000840245.1 (E.coli phage lambda)
+   - Note: GCA_000840825.1 for Lambdapapillomavirus 2
 - NCBI_refseq_visues_20260731.noT1.fasta
+   - GCA_000845005.1 (Escherichia phage T1)
 
+Bacterial FASTA References
+- FDA-ARGOS_bacteria_20260731.noThermusthermophilus.fasta
 
+### Set-up
+1. Generate synthetic reads per FASTA
+2. Combine Viral and Bacterial synth reads for background datasets 
+   - i.e. not including references
+3. Test for presence of reference
+   - Filter reads mapping to reference if required (note # of reads)
+4. Spike in reference reads
+5. Test de-hosting process
 
+### Starting with Viral content only
