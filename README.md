@@ -13,6 +13,7 @@ The project looks to evaluate methods of removing references from metagenomic da
 The following datasets were canabilised from the Deacon pre-pub [paper](https://www.biorxiv.org/content/10.1101/2025.06.09.658732v1.full.pdf):
 - [Viral Genomes](https://zenodo.org/records/15411280): 14,861 complete NCBI RefSeq virus sequences downloaded on 2026-07-31
 - [Bacterial genomes](https://zenodo.org/records/15424142): all 1,428 complete [FDA-ARGOS bacterial reference genomes]((https://www.nature.com/articles/s41467-019-11306-6)) including plasmids, downloaded on 2026-07-31.
+- Fungal Genomes: all 5,488 complete NCBI RefSeq, downloaded on 2026-07-31.
 
 ## Synthetic Read Generation Tools
 - Short Read, [DWGSIM](https://github.com/nh13/DWGSIM)
@@ -154,19 +155,25 @@ done;
 ```
 
 ### Expected outputs:
+All Viral Genomes
+- NCBI_refseq_viruses_20260731.fasta
 Viral FASTA References
-- NCBI_refseq_visues_20260731.noTMV.fasta
+- NCBI_refseq_viruses_20260731.noTMV.fasta
    - Remove GCA_000854365.1
-- NCBI_refseq_visues_20260731.noHazara.fasta
+- NCBI_refseq_viruses_20260731.noHazara.fasta
    - GCA_002831085.1
-- NCBI_refseq_visues_20260731.noLambda.fasta
+- NCBI_refseq_viruses_20260731.noLambda.fasta
    - GCA_000840245.1 (E.coli phage lambda)
    - Note: GCA_000840825.1 for Lambdapapillomavirus 2
-- NCBI_refseq_visues_20260731.noT1.fasta
+- NCBI_refseq_viruses_20260731.noT1.fasta
    - GCA_000845005.1 (Escherichia phage T1)
 
 Bacterial FASTA References
-- FDA-ARGOS_bacteria_20260731.noThermusthermophilus.fasta
+All bacterial genomes
+- FDA-ARGOS_bacteria_20260731.fasta
+
+Fungal FASTA References
+- NCBI_refseq_fungi_20260731.fasta
 
 ### Set-up
 1. Generate synthetic reads per FASTA
@@ -178,3 +185,29 @@ Bacterial FASTA References
 5. Test de-hosting process
 
 ### Starting with Viral content only
+- Transferred viral and bacterial datasets across to HPC working directory
+- Uncompress directories for bacteria and viruses. Note: Leaving fungi for the moment.
+```
+mkdir FDA-ARGOS_bacterial_20260731/
+unzip FDA-ARGOS_bacterial_20260731.zip -d FDA-ARGOS_bacterial_20260731/
+mkdir NCBI_refseq_viruses_20260731
+unzip NCBI_refseq_viruses_20260731.zip -d NCBI_refseq_viruses_20260731
+```
+
+- Generate synthetic reads for viruses:
+   - Create PBSim3 environment:
+   ````
+   mm create -n pbsim3
+   mm activate  pbsim3
+   mm install -c bioconda pbsim3
+   ````
+```
+mkdir -p synth-reads/viral
+cd $_
+
+
+for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/NCBI_refseq_viruses_20260731/ncbi_dataset/data/*/*.fna; do
+    acc=$(basename "$fasta" .fa)
+    pbsim --seed 1 --strategy wgs --method errhmm --errhmm /home/phe.gov.uk/nicholas.ellaby/micromamba/envs/pbsim3/data/ERRHMM-ONT-HQ.model --depth 10 --genome ${fasta} --prefix ${acc} --id-prefix ${acc}__ --length-mean 1000 --length-max 10000 --accuracy-mean 0.98; cat ${acc}*.fastq | pigz > ${acc}.fastq.gz
+done
+```
