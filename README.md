@@ -18,6 +18,21 @@ The following datasets were canabilised from the Deacon pre-pub [paper](https://
 - Short Read, [DWGSIM](https://github.com/nh13/DWGSIM)
 - Long Read, [PBSIM](https://github.com/yukiteruono/pbsim3)
 
+## Reference Organisms for Internal Control Spike-in
+Viral:
+- Tobacco Mosaic Virus ([Adela Alcolea-Medina et al., 2025](https://www.thelancet.com/journals/lanmic/article/PIIS2666-5247(25)00102-8/fulltext))
+- Hanza Virus ([Kuiama Lewandowski et al., 2019](https://pubmed.ncbi.nlm.nih.gov/31666364/))
+- Lambda Phage ([Jiayi Duan et al., 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC12633245/))
+- T1 Phage ([Zhangfan Fu et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10714923/))
+
+Bacterial FASTA References 
+- [ZymoBIOMICs references](https://www.bioscience.co.uk/cpl/zymobiomics-dna-kits?gad_source=1&gad_campaignid=21301459676&gbraid=0AAAAAD_TCRJyensW6-q0ajdbGar2qCICn&gclid=CjwKCAjwj7HTBhBiEiwA8s35OmX-N4EqACiysya4QZFb7_7QZMjsWO357qzxvQ40A8Ae7OlWGuWCbhoC0j4QAvD_BwE):
+  - Imtechella halotolerans
+  - Allobacillus halotolerans
+  - Truepera radiovictrix
+- Thermus thermophilus ([Zhangfan Fu et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10714923/)): Thermus thermophilus and T1 phages are comparable as mNGS IC in pathogen quantitation and are both superior than artificial DNA sequences.
+
+
 ## Creating Reference Datasets
 Given the references will be in the refseq/argos downloads, need to filter out references from those datasets. 
 ### 1. Remove References from Dataset
@@ -144,6 +159,5 @@ Viral FASTA References
 - NCBI_refseq_visues_20260731.noLambda.fasta
 - NCBI_refseq_visues_20260731.noT1.fasta
 
-Bacterial FASTA References
-- 
+
 
