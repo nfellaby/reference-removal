@@ -219,3 +219,12 @@ for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/FDA-ARGOS_bacterial_202607
     pbsim --seed 1 --strategy wgs --method errhmm --errhmm /home/phe.gov.uk/nicholas.ellaby/micromamba/envs/pbsim3/data/ERRHMM-ONT-HQ.model --depth 10 --genome ${fasta} --prefix ${acc} --id-prefix ${acc}__ --length-mean 5000 --length-max 50000 --accuracy-mean 0.98; cat ${acc}*.fastq | pigz > ${acc}.fastq.gz;
 done;
 ```
+
+- Minor issue, output files are in .fq.gz, I wanted to consolidate them into single files:
+```
+for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/FDA-ARGOS_bacterial_20260731/data/*/*fna; do
+    acc=$(basename "$fasta" .fa); \
+    cat ${acc}_*.fq.gz > ${acc}.combined.fq.gz;
+done;
+```
+
