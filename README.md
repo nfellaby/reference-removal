@@ -33,6 +33,23 @@ Bacterial FASTA References
   - Allobacillus halotolerans
   - Truepera radiovictrix
 
+Predefined by mSCAPE:  
+spike-in:
+- ERCC-RNA_4456740
+- bacillus_ms2phage
+- ms2-phage
+- phix
+- tobacco_mosaic_virus
+- zymo_D6320
+- zymo_D6321
+
+Internal Controls:
+- [NIBSC_11/242](https://nibsc.org/products/brm_product_catalogue/detail_page.aspx?catid=11/242): Mock community containing 25 human pathogenic viruses
+- [NIBSC_20/170](https://nibsc.org/about_us/latest_news/winter_multiplex.aspx): Flu A (H1N1, H3N2), Flu B, RSV A, RSV B, SARS-CoV-2
+- bacillus_ms2phage
+- zepto_rp2.1: Adenovirus 1, 3, 31; C. pneumoniae; Influenza A 2009 H1N1pdm, H3N2; Metapneumovirus 8; M. pneumoniae; Parainfluenza Type 1, 4; Rhinovirus 1A; SARS-CoV-2; B. parapertussis; B. pertussis; Coronavirus 229E, HKU-1, BL63, OC43; Influenza AH1, Influenza B, Parainfluenza Type 2, 3; RSV A
+- [zymo-mc_D6300](https://zymoresearch.eu/collections/zymobiomics-microbial-community-standards/products/zymobiomics-microbial-community-standard): Listeria monocytogenes - 12%, Pseudomonas aeruginosa - 12%, Bacillus subtilis - 12%, Escherichia coli - 12%, Salmonella enterica - 12%, Lactobacillus fermentum - 12%, Enterococcus faecalis - 12%, Staphylococcus aureus - 12%, Saccharomyces cerevisiae - 2%, and Cryptococcus neoformans - 2%.
+
 
 
 ## Creating Reference Datasets
@@ -111,7 +128,7 @@ Again, canabalised from Deacon pre-pub [paper](https://www.biorxiv.org/content/1
 
 Command used:
 ```
- for fasta in rsviruses17900/*.fa; do
+ for fasta in bacteria/*.fa; do
     acc=$(basename "$fasta" .fa) \ 
     pbsim \
         --seed 1 \
@@ -138,7 +155,7 @@ done;
 
 Command used:
 ```
-for fasta in rsviruses17900/*.fa; do \
+for fasta in bacteria/*.fa; do \
     acc=$(basename "$fasta" .fa) \
     dwgsim \
         -C 10 \
@@ -222,9 +239,13 @@ done;
 
 - Minor issue, output files are in .fq.gz, I wanted to consolidate them into single files:
 ```
-for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/FDA-ARGOS_bacterial_20260731/data/*/*fna; do
-    acc=$(basename "$fasta" .fa); \
-    cat ${acc}_*.fq.gz > ${acc}.combined.fq.gz;
-done;
+for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/FDA-ARGOS_bacterial_20260731/data/*/*fna; do     acc=$(basename "$fasta" .fa); echo ${acc}; cat ${acc}_*.fq.gz > ${acc}.combined.fq.gz; done;
 ```
+
+- Do the same for viruses:
+```
+for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/NCBI_refseq_viruses_20260731/ncbi_dataset/data/*/*.fna; do     acc=$(basename "$fasta" .fa); echo ${acc}; cat ${acc}_*.fq.gz > ${acc}.combined.fq.gz; done;
+```
+
+
 
