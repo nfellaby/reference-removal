@@ -264,6 +264,7 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
 
 ### Running tools
 #### 1. Deacon
+- Running on TMV:
    - Build index: `deacon index build ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000854365.1/GCF_000854365.1_ViralProj15071_genomic.fna >GCF_000854365.deacon.idx`
    - Check how many reads it finds associated with TMV in each fa:  
       - Running against dataset without reference:
@@ -355,6 +356,54 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
 
       - What is Rehmannia mosaic virus:
          - Rehmannia mosaic virus (ReMV) is a plant-infecting virus
+      
+      - Potential for Further investigation:
+         - Map reads to TMV reference, are they exact matches? Identical regions of genomes?
+         - If they are exact matches this would limit the utility of those reads?
+
+         - Extrac mis-assigned reads from dataset:
+         `seqkit grep -n -f misannotated_tmv_reads.txt All_viral_bacterial.minusTMV.combined -o misannotated_tmv_reads.fq.gz`
+         - Map to reference:
+         - Remove shared minimizers with:  
+         `deacon index diff 1.idx 2.idx > 1-2.idx`  
+         `deacon index build ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000870525.1/GCF_000870525.1_ViralProj18885_genomic.fna > GCF_000870525.1.deacon.idx` - Rehmannia mosaic virus   
+         `deacon index build ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000911995.1/GCF_000911995.1_ViralProj217881_genomic.fna > GCF_000911995.1.deacon.idx` - Tomato mottle mosaic virus
+         `deacon index diff GCF_002831085.1.deacon.idx GCF_000870525.1.deacon.idx> GCF_002831085.1-GCF_000870525.1`
+         ```
+         0525.1.deacon.idx> GCF_002831085.1-GCF_000870525.1
+         First index: loaded 2277 minimizers
+         Second index: loaded 793 minimizers
+         Removed 0 minimizers, 2277 remaining
+         Completed diff operation in 6.74ms
+         ```
+         `deacon index diff GCF_002831085.1.deacon.idx GCF_000911995.1.deacon.idx > GCF_002831085.1-GCF_000911995.1.deacon.idx`   
+         ```
+         First index: loaded 2277 minimizers
+         Second index: loaded 815 minimizers
+         Removed 0 minimizers, 2277 remaining
+         Completed diff operation in 16.88ms
+         ```
+
+
+- Running with Hazara Virus (GCA_002831085.1):
+   - Move Hazara Virus (GCA_002831085.1) into reference folder:  
+   `mv ../synth-reads/viral/GCF_002831085.1_ASM283108v1_genomic.fna.combined.fq.gz ../synth-reads/reference_synth_reads/`
+   - Combine all bacterial and viral (minus GCA_002831085.1):
+   `cat viral/*.fna.combined.fq.gz bacteria/*.fna.combined.fq.gz >>All_viral_bacterial.minusHazara.combined.fq.gz`
+   - Generate Deacon reference:  
+   `deacon index build ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_002831085.1/GCF_002831085.1_ASM283108v1_genomic.fna >GCF_002831085.1.deacon.idx` 
+   - Run Deacon with reference on completed dataset:
+   `deacon filter -d GCF_002831085.1.deacon.idx ../synth-reads/All_viral_bacterial.combined.fq.gz -o All_viral_bacterial.combined.deacon.Hazara_filt.fq.gz -s All_viral_bacterial.combined.deacon.Hazara_filt.summary.json`
+   - Run Deacon with reference on dataset minus GCA_002831085.1:  
+   `deacon filter -d GCF_002831085.1.deacon.idx ../synth-reads/All_viral_bacterial.minusHazara.combined.fq.gz -o All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.fq.gz -s All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.summary.json`
+   - Get Seqs IDs for `All_viral_bacterial.combined.deacon.Hazara_filt.fq.gz`:   
+   `seqkit seq -n All_viral_bacterial.combined.deacon.Hazara_filt.fq.gz | sort -u > All_viral_bacterial.combined.deacon.Hazara_filt.ids.txt`
+   - Get Seqs IDs for `All_viral_bacterial.minusHazara.combined.fq.gz`:
+   `seqkit seq -n ../synth-reads/All_viral_bacterial.minusHazara.combined.fq.gz | sort -u > All_viral_bacterial.minusHazara.combined.ids.txt`
+   - Get Seqs IDs for `All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.fq.gz`:   
+   `seqkit seq -n All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.fq.gz | sort -u > All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.ids.txt`
+
+
    
 #### 2. Hostile
 - Install:  
@@ -389,5 +438,7 @@ d.fq.gz --index GCF_000854365.1_ViralProj15071_genomic.mni -t 12 -o All_viral_ba
 - Required reducing strictness of syntax: `export NXF_SYNTAX_PARSER=v1`
 - Test install:   
 `nextflow run nf-core/detaxizer -profile test,apptainer --outdir test_profile`
+- Issues running on SMED
+
 
 
