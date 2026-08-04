@@ -309,7 +309,7 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
          GCF_000870525.1_ViralProj18885_genomic.fna__1_8
          GCF_000911995.1_ViralProj217881_genomic.fna__1_30
         ```
-        - So two references generated synthetic reads:  ([Rehmannia mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000870525.1/)) and GCF_000911995.1([Tomato mottle mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000911995.1/))
+        - So two references generated synthetic reads:  GCF_000870525.1 ([Rehmannia mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000870525.1/), 12 seqs) and GCF_000911995.1([Tomato mottle mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000911995.1/), 1 seq)
 
 
 
