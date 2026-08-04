@@ -263,3 +263,47 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
 - Some minor clean-up of temp files
 
 ### Running tools
+1. Deacon
+   - Build index: `deacon index build ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000854365.1/GCF_000854365.1_ViralProj15071_genomic.fna >GCF_000854365.deacon.idx`
+   - Check how many reads it finds associated with TMV in each fa:  
+      - Running against dataset without reference:
+        ```
+        deacon filter -d GCF_000854365.deacon.idx ../synth-reads/All_viral_bacterial.minusTMV.combined.fq.gz -o All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.fq.gz -s All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.summary.json
+
+        Deacon v0.15.0; mode: deplete; input: single; options: abs_threshold=2, rel_threshold=0.01, threads=8(4f+4c)
+        Loaded index (k=31, w=15) in 4.35ms
+        Retained 24835274/24835287 sequences (100.000%), 127882883577/127882914955 bp (100.000%) in 859.51s. 28895 seqs/s (148.8 Mbp/s)
+
+        "seqs_removed": 13,
+        "bp_removed": 31378,
+        ```
+        To work out which sequences have been removed:
+        ```
+        # Extract sorted, unique read IDs from each file
+        seqkit seq -n ../synth-reads/All_viral_bacterial.minusTMV.combined.fq.gz | sort -u > All_viral_bacterial.minusTMV.combined.ids.txt
+        seqkit seq -n All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.fq.gz | sort -u > All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.ids.txt
+
+        # Reads present in file1 but not file2
+        comm -23 ids1.txt ids2.txt > only_in_1.txt
+
+        # Reads present in file2 but not file1
+        comm -13 ids1.txt ids2.txt > only_in_2.txt
+
+        # Pull the actual FASTQ records for those unique reads
+        seqkit grep -f only_in_1.txt file1.fastq.gz -o unique_to_1.fastq.gz
+        seqkit grep -f only_in_2.txt file2.fastq.gz -o unique_to_2.fastq.gz
+        ```
+      - Running against dataset with reference:  
+        ```
+        deacon filter -d GCF_000854365.deacon.idx ../synth-reads/All_viral_bacterial.combined.fq.gz -o All_viral_bacterial.combined.deacon.TMV_filt.fq.gz -s All_viral_bacterial.combined.deacon.TMV_filt.summary.json
+        
+
+        Deacon v0.15.0; mode: deplete; input: single; options: abs_threshold=2, rel_threshold=0.01, threads=8(4f+4c)
+        Loaded index (k=31, w=15) in 11.63ms
+        Retained 24835274/24835326 sequences (100.000%), 127882883577/127882978905 bp (100.000%) in 947.57s. 26210 seqs/s (135.0 Mbp/s)
+        Filter summary saved to "All_viral_bacterial.combined.deacon.TMV_filt.summary.json"
+
+        "seqs_removed": 52
+        "bp_removed": 95328
+        ```
+
