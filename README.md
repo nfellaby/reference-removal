@@ -313,5 +313,7 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
    - Number of synthetic reads generated for TMV: 39 (63,950 bp):  
    `seqkit stats ../synth-reads/viral/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.gz`
        - This suggests that the synthetic reads generated for TMV have been successfully removed from the full dataset (read # from dataset - TMV) - (read # from dataset + TMV)
+       - I suspect that the 13 reads present in the total dataset are TMV, but have been included in a reference genome. Will review IDs that match to these sequences, understand which samples they are retrieved from.
 
    
+
