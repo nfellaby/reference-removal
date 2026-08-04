@@ -247,5 +247,19 @@ for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/FDA-ARGOS_bacterial_202607
 for fasta in /home/phe.gov.uk/nicholas.ellaby/scratch/NCBI_refseq_viruses_20260731/ncbi_dataset/data/*/*.fna; do     acc=$(basename "$fasta" .fa); echo ${acc}; cat ${acc}_*.fq.gz > ${acc}.combined.fq.gz; done;
 ```
 
+- Move reference fastq's to a separate directory:
+```
+mkdir reference_synth_reads
+mv viral/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.gz reference_synth_reads/
+```
+- Combine all viral and bacterial datasets, without TMV
+```
+cat viral/*.fna.combined.fq.gz bacteria/*.fna.combined.fq.gz >>All_viral_bacterial.minusTMV.combined.fq.gz
+```
+- Copy TMV back into original directory
+```
+cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.gz  viral/
+```
+- Some minor clean-up of temp files
 
-
+### Running tools
