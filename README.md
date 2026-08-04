@@ -307,3 +307,11 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
         "bp_removed": 95328
         ```
 
+   - 13 reads (31,378 bp) removed from dataset without TMV spiked in
+   - 52 reads (95,328 bp) removed from dataset with TMV spiked in
+
+   - Number of synthetic reads generated for TMV: 39 (63,950 bp):  
+   `seqkit stats ../synth-reads/viral/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.gz`
+       - This suggests that the synthetic reads generated for TMV have been successfully removed from the full dataset (read # from dataset - TMV) - (read # from dataset + TMV)
+
+   
