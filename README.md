@@ -350,6 +350,11 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
          - GCF_000870525.1: 12 ([Rehmannia mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000870525.1/))
          - GCF_000911995.1: 1 ([Tomato mottle mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000911995.1/))
 
+      - With respect to GCF_000870525.1, there are a total of 39 sequences (63,950 bases). Therefore Deacon mistakenly filtered out ~31% of Rehmannia mosaic virus synthetic reads. 
+      - With respect to GCF_000911995.1, there are a total of 36 sequences (63,980 bases). Therefore Deacon mistakenly filtered out ~2.8% of Tomato mottle mosaic virus reads.
+
+      - What is Rehmannia mosaic virus:
+         - Rehmannia mosaic virus (ReMV) is a plant-infecting virus
    
 #### 2. Hostile
 - Generate index, minimapper used for long-reads:   
