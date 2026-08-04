@@ -33,7 +33,7 @@ Bacterial FASTA References
   - Allobacillus halotolerans
   - Truepera radiovictrix
 
-Predefined by mSCAPE:  
+[Predefined by mSCAPE](https://github.com/artic-network/scylla/tree/main/resources/spike_ins):  
 spike-in:
 - ERCC-RNA_4456740
 - bacillus_ms2phage
@@ -289,9 +289,6 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
         # Reads present in All_viral_bacterial.minusTMV.combined.deacon.TMV_filt but not All_viral_bacterial.minusTMV.combined
         comm -13 All_viral_bacterial.minusTMV.combined.ids.txt All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.ids.txt > only_in_All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.ids.txt
 
-        # Pull the actual FASTQ records for those unique reads
-        seqkit grep -f only_in_1.txt file1.fastq.gz -o unique_to_1.fastq.gz
-        seqkit grep -f only_in_2.txt file2.fastq.gz -o unique_to_2.fastq.gz
         ```
         - Sequences present in `All_viral_bacterial.minusTMV.combined` but not in `All_viral_bacterial.minusTMV.combined.deacon.TMV_filt` (no sequences were unique in the opposite direction):
         ```
@@ -334,6 +331,15 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
    `seqkit stats ../synth-reads/viral/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.gz`
        - This suggests that the synthetic reads generated for TMV have been successfully removed from the full dataset (read # from dataset - TMV) - (read # from dataset + TMV)
        - I suspect that the 13 reads present in the total dataset are TMV, but have been included in a reference genome. Will review IDs that match to these sequences, understand which samples they are retrieved from.
+
+   - Validate that those reads are infact from the TMV syntetic reference reads:
+      - Get read ids from TMV spiked datasets filtered by deacon:  
+      ```
+      # Extract sorted, unique read IDs from each file
+      seqkit seq -n ../synth-reads/All_viral_bacterial.combined.fq.gz | sort -u > All_viral_bacterial.combined.ids.txt
+      
+      seqkit seq -n All_viral_bacterial.combined.deacon.TMV_filt.fq.gz | sort -u  > All_viral_bacterial.combined.deacon.TMV_filt.ids.txt
+      ```
 
    
 
