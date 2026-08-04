@@ -263,7 +263,7 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
 - Some minor clean-up of temp files
 
 ### Running tools
-1. Deacon
+#### 1. Deacon
    - Build index: `deacon index build ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000854365.1/GCF_000854365.1_ViralProj15071_genomic.fna >GCF_000854365.deacon.idx`
    - Check how many reads it finds associated with TMV in each fa:  
       - Running against dataset without reference:
@@ -339,7 +339,22 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
       seqkit seq -n ../synth-reads/All_viral_bacterial.combined.fq.gz | sort -u > All_viral_bacterial.combined.ids.txt
       
       seqkit seq -n All_viral_bacterial.combined.deacon.TMV_filt.fq.gz | sort -u  > All_viral_bacterial.combined.deacon.TMV_filt.ids.txt
+
+      # Reads present in `All_viral_bacterial.combined.ids.txt` but not in `All_viral_bacterial.combined.deacon.TMV_filt.ids.txt`
+      comm -23 All_viral_bacterial.combined.ids.txt All_viral_bacterial.combined.deacon.TMV_filt.ids.txt > ids_only_in_All_viral_bacterial.combined.ids.txt
+
+      comm -13 All_viral_bacterial.combined.ids.txt All_viral_bacterial.combined.deacon.TMV_filt.ids.txt > ids_only_All_viral_bacterial.combined.deacon.TMV_filt.ids.txt
       ```
+      - Of the 52 unique reads filtered by Deacon for TMV from `All_viral_bacterial.combined.ids.txt`:
+         - GCF_000854365.1: 39 ([Tobacco mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000854365.1/))
+         - GCF_000870525.1: 12 ([Rehmannia mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000870525.1/))
+         - GCF_000911995.1: 1 ([Tomato mottle mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000911995.1/))
 
    
+#### 2. Hostile
+- Generate index, minimapper used for long-reads:   
+`minimap2 -d GCF_000854365.1_ViralProj15071_genomic.mni ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000854365.1/GCF_000854365.1_ViralProj15071_genomic.fna`
+
+- Run clean using index with Dataset that doesn't contain TMV:  
+`hostile clean --fastq1 ../synth-reads/All_viral_bacterial.minusTMV.combined.fq.gz --index GCF_000854365.1_ViralProj15071_genomic.mni -t 12 -o All_viral_bacterial.minusTMV.combined.hostile.TMV_filt.fq.gz`
 
