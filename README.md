@@ -283,16 +283,36 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
         seqkit seq -n ../synth-reads/All_viral_bacterial.minusTMV.combined.fq.gz | sort -u > All_viral_bacterial.minusTMV.combined.ids.txt
         seqkit seq -n All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.fq.gz | sort -u > All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.ids.txt
 
-        # Reads present in file1 but not file2
-        comm -23 ids1.txt ids2.txt > only_in_1.txt
+        # Reads present in All_viral_bacterial.minusTMV.combined but not All_viral_bacterial.minusTMV.combined.deacon.TMV_filt
+        comm -23 All_viral_bacterial.minusTMV.combined.ids.txt All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.ids.txt > ids_only_in_All_viral_bacterial.minusTMV.combined.ids.txt
 
-        # Reads present in file2 but not file1
-        comm -13 ids1.txt ids2.txt > only_in_2.txt
+        # Reads present in All_viral_bacterial.minusTMV.combined.deacon.TMV_filt but not All_viral_bacterial.minusTMV.combined
+        comm -13 All_viral_bacterial.minusTMV.combined.ids.txt All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.ids.txt > only_in_All_viral_bacterial.minusTMV.combined.deacon.TMV_filt.ids.txt
 
         # Pull the actual FASTQ records for those unique reads
         seqkit grep -f only_in_1.txt file1.fastq.gz -o unique_to_1.fastq.gz
         seqkit grep -f only_in_2.txt file2.fastq.gz -o unique_to_2.fastq.gz
         ```
+        - Sequences present in `All_viral_bacterial.minusTMV.combined` but not in `All_viral_bacterial.minusTMV.combined.deacon.TMV_filt` (no sequences were unique in the opposite direction):
+        ```
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_10
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_15
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_16
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_19
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_20
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_23
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_28
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_31
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_36
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_38
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_4
+         GCF_000870525.1_ViralProj18885_genomic.fna__1_8
+         GCF_000911995.1_ViralProj217881_genomic.fna__1_30
+        ```
+        - So two references generated synthetic reads:  ([Rehmannia mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000870525.1/)) and GCF_000911995.1([Tomato mottle mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000911995.1/))
+
+
+
       - Running against dataset with reference:  
         ```
         deacon filter -d GCF_000854365.deacon.idx ../synth-reads/All_viral_bacterial.combined.fq.gz -o All_viral_bacterial.combined.deacon.TMV_filt.fq.gz -s All_viral_bacterial.combined.deacon.TMV_filt.summary.json
