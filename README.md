@@ -357,9 +357,37 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
          - Rehmannia mosaic virus (ReMV) is a plant-infecting virus
    
 #### 2. Hostile
+- Install:  
+`mm create -y -n hostile -c conda-forge -c bioconda hostile`  
+`mm activate hostile`
 - Generate index, minimapper used for long-reads:   
 `minimap2 -d GCF_000854365.1_ViralProj15071_genomic.mni ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000854365.1/GCF_000854365.1_ViralProj15071_genomic.fna`
 
 - Run clean using index with Dataset that doesn't contain TMV:  
 `hostile clean --fastq1 ../synth-reads/All_viral_bacterial.minusTMV.combined.fq.gz --index GCF_000854365.1_ViralProj15071_genomic.mni -t 12 -o All_viral_bacterial.minusTMV.combined.hostile.TMV_filt.fq.gz`
+    - Results: 153 reads removed
+    - Get sequence IDs for those reads that have passed filtering (requires seqkit install btw):  
+    `seqkit seq -n All_viral_bacterial.minusTMV.combined.hostile.TMV_filt.fq.gz/All_viral_bacterial.minusTMV.combined.clean.fastq.gz | sort -u > All_viral_bacterial.minusTMV.combined.hostile.TMV_filt.ids.txt`
+
+
+- Run clean using index with dataset that contains TMV:  
+`hostile clean --fastq1 ../synth-reads/All_viral_bacterial.combine
+d.fq.gz --index GCF_000854365.1_ViralProj15071_genomic.mni -t 12 -o All_viral_bacterial.combined.hostile.TMV_filt.fq.gz`
+    - Results: 192 reads removed (+39 reads)
+    - Get sequence IDs for those reads that have passed filtering:
+    `seqkit seq -n All_viral_bacterial.combined.hostile.TMV_filt.fq.gz/All_viral_bacterial.combined.clean.fastq.gz | sort -u > All_viral_bacterial.combined.hostile.TMV_filt.ids.txt`
+
+- NB: There is an option to invert the Hostile process, keeping the mapped ("filtered") reads, rather than the non-mapped reads. However, given this isn't the proposed use case, will run as standard. I don't expect there to be a difference between inverted reads and those that are removed in the standard clean process.
+
+#### 2. Detaxizer
+- This is an nf-core nextflow process, requires the installation of nextflow
+- Install:    
+`mm create -n detaxizser`  
+`mm activate detaxizer`  
+`mm install -c bioconda nextflow`  
+   - Note: It is not recommended to install nextflow in this manner, but makes sense on this HPC
+- Required reducing strictness of syntax: `export NXF_SYNTAX_PARSER=v1`
+- Test install:   
+`nextflow run nf-core/detaxizer -profile test,apptainer --outdir test_profile`
+
 
