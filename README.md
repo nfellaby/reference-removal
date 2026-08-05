@@ -292,21 +292,6 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
 
         ```
         - Sequences present in `All_viral_bacterial.minusTMV.combined` but not in `All_viral_bacterial.minusTMV.combined.deacon.TMV_filt` (no sequences were unique in the opposite direction):
-        ```
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_10
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_15
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_16
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_19
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_20
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_23
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_28
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_31
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_36
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_38
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_4
-         GCF_000870525.1_ViralProj18885_genomic.fna__1_8
-         GCF_000911995.1_ViralProj217881_genomic.fna__1_30
-        ```
         - So two references generated synthetic reads:  GCF_000870525.1 ([Rehmannia mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000870525.1/), 12 seqs) and GCF_000911995.1([Tomato mottle mosaic virus](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000911995.1/), 1 seq)
 
 
