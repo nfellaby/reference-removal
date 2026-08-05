@@ -397,6 +397,7 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
          ```
          - Re-run deacon with new combined index (just on full dataset):   
          `deacon filter -d GCF_000854365-GCF_000870525.1-GCF_000911995.1.idx ../synth-reads/All_viral_bacterial.combined.fq.gz -o All_viral_bacterial.combined.deacon.TMV_filt.combined_index.fq.gz -s All_viral_bacterial.combined.deacon.TMV_filt.combined_index.summary.json`
+         - 39 sequences removed, matches the number of TMV reads synthesized and added to the dataset, need to check though
 
 - Running with Hazara Virus (GCA_002831085.1):
    - Move Hazara Virus (GCA_002831085.1) into reference folder:  
