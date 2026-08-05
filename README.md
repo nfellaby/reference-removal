@@ -364,26 +364,39 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
          - Extrac mis-assigned reads from dataset:
          `seqkit grep -n -f misannotated_tmv_reads.txt All_viral_bacterial.minusTMV.combined -o misannotated_tmv_reads.fq.gz`
          - Map to reference:
-         - Remove shared minimizers with:  
+         - Remove shared minimizers with:
+             - GCF_000854365:TMV
+             - GCF_000870525.1: Rehmannia mosaic virus
+             - GCF_000911995.1: Tomato mottle mosaic virus
          `deacon index diff 1.idx 2.idx > 1-2.idx`  
          `deacon index build ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000870525.1/GCF_000870525.1_ViralProj18885_genomic.fna > GCF_000870525.1.deacon.idx` - Rehmannia mosaic virus   
          `deacon index build ../NCBI_refseq_viruses_20260731/ncbi_dataset/data/GCF_000911995.1/GCF_000911995.1_ViralProj217881_genomic.fna > GCF_000911995.1.deacon.idx` - Tomato mottle mosaic virus
-         `deacon index diff GCF_002831085.1.deacon.idx GCF_000870525.1.deacon.idx> GCF_002831085.1-GCF_000870525.1`
+         - Identify and remove shared minimizers between GCF_000854365 (TMV) and GCF_000870525.1 (Rehmannia mosaic virus)
+         `deacon index diff GCF_000854365.deacon.idx GCF_000870525.1.deacon.idx> GCF_000854365-GCF_000870525.1.idx`
          ```
-         0525.1.deacon.idx> GCF_002831085.1-GCF_000870525.1
-         First index: loaded 2277 minimizers
+         First index: loaded 815 minimizers
          Second index: loaded 793 minimizers
-         Removed 0 minimizers, 2277 remaining
-         Completed diff operation in 6.74ms
+         Removed 13 minimizers, 802 remaining
+         Completed diff operation in 4.65ms
          ```
-         `deacon index diff GCF_002831085.1.deacon.idx GCF_000911995.1.deacon.idx > GCF_002831085.1-GCF_000911995.1.deacon.idx`   
+         - Identify and remove shared minimizers between GCF_000854365 (TMV) and GCF_000911995.1 (Tomato mottle mosaic virus)
+         `deacon index diff GCF_000854365.deacon.idx GCF_000911995.1.deacon.idx > GCF_000854365-GCF_000911995.1.deacon.idx`   
          ```
-         First index: loaded 2277 minimizers
+         First index: loaded 815 minimizers
          Second index: loaded 815 minimizers
-         Removed 0 minimizers, 2277 remaining
-         Completed diff operation in 16.88ms
+         Removed 3 minimizers, 812 remaining
+         Completed diff operation in 1.87ms
          ```
-
+         - Remove common index from all three?
+         `deacon index diff GCF_000854365-GCF_000870525.1.idx GCF_000911995.1.deacon.idx > GCF_000854365-GCF_000870525.1-GCF_000911995.1.idx`
+         ```
+         First index: loaded 802 minimizers
+         Second index: loaded 815 minimizers
+         Removed 2 minimizers, 800 remaining
+         Completed diff operation in 2.37ms
+         ```
+         - Re-run deacon with new combined index (just on full dataset):   
+         `deacon filter -d GCF_000854365-GCF_000870525.1-GCF_000911995.1.idx ../synth-reads/All_viral_bacterial.combined.fq.gz -o All_viral_bacterial.combined.deacon.TMV_filt.combined_index.fq.gz -s All_viral_bacterial.combined.deacon.TMV_filt.combined_index.summary.json`
 
 - Running with Hazara Virus (GCA_002831085.1):
    - Move Hazara Virus (GCA_002831085.1) into reference folder:  
@@ -402,7 +415,15 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
    `seqkit seq -n ../synth-reads/All_viral_bacterial.minusHazara.combined.fq.gz | sort -u > All_viral_bacterial.minusHazara.combined.ids.txt`
    - Get Seqs IDs for `All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.fq.gz`:   
    `seqkit seq -n All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.fq.gz | sort -u > All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.ids.txt`
-
+   - What reads were present in All bacterial viral not present in the Hazara filtered  
+   `comm -23 All_viral_bacterial.combined.ids.txt All_viral_bacterial.combined.deacon.Hazara_filt.ids.txt > only_in_All_viral_bacterial.combined.deacon.Hazara_filt.ids.txt`
+      - 109 GCF_002831085.1 (Hazara virus) reads
+      - No reads were only in All_viral_bacterial.combined.deacon.Hazara_filt.ids.txt (sanity check)
+   - What reads were present in All bacterial minus Hazara vs Hazara filtered:   
+   `comm -23 All_viral_bacterial.minusHazara.combined.ids.txt All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt.combined.ids.txt > only_in_All_viral_bacterial.minusHazara.combined.ids.txt`
+      - No reads present only in All_viral_bacterial.minusHazara vs All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt
+      - No reads present only in All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt vs All_viral_bacterial.minusHazara (sanity check)
+   
 
    
 #### 2. Hostile
@@ -425,6 +446,11 @@ d.fq.gz --index GCF_000854365.1_ViralProj15071_genomic.mni -t 12 -o All_viral_ba
     - Results: 192 reads removed (+39 reads)
     - Get sequence IDs for those reads that have passed filtering:
     `seqkit seq -n All_viral_bacterial.combined.hostile.TMV_filt.fq.gz/All_viral_bacterial.combined.clean.fastq.gz | sort -u > All_viral_bacterial.combined.hostile.TMV_filt.ids.txt`
+    `seqkit seq -n All_viral_bacterial.minusTMV.combined.hostile.TMV_filt.fq.gz/All_viral_bacterial.minusTMV.combined.hostile.TMV_filt.fq.gz | sort -u >All_viral_bacterial.minusTMV.combined.hostile.TMV_filt.ids.txt`
+    - What sequence ids are present only in All_viral_bacterial.combined.ids.txt vs All_viral_bacterial.combined.hostile.TMV_filt.ids.txt
+    `comm -23 ../deacon/All_viral_bacterial.combined.ids.txt All_viral_bacterial.combined.hostile.TMV_filt.ids.txt > only_../deacon/All_viral_bacterial.combined.ids.txt`
+       - Hostile returned many Taxa: 39 (reads) GCF_000854365.1 (TMV); 23 GCF_001461485.1(Tomato brown rugose fruit); 23 GCF_000870525.1 (Rehmannia mosaic); 21 GCF_000853705.1 (Tomato mosaic); 17 GCF_000911995.1 (Tomato mottle mosaic); 17 GCF_000873425.1 (Bell pepper mottle); 16 GCF_000859645.1 (Pepper mild mottle); 9 GCF_000879495.1 (Brugmansia mild mottle); 7 GCF_001654245.1 (Tropical soda apple mosaic); 5 GCF_000847545.1 (Tobacco mild green mosaic); 4 GCF_002145505.1 (Hoya chlorotic spot); 4 GCF_000912435.1 (Yellow tailflower mild mottle); 3 GCF_000853745.1 (Paprika mild mottle); 2 GCF_000859905.1 (Odontoglossum ringspot); 1 GCF_000870125.1 (Streptocarpus flower break); 1 GCF_000852265.1 (Obuda pepper)
+          - All plant viruses
 
 - NB: There is an option to invert the Hostile process, keeping the mapped ("filtered") reads, rather than the non-mapped reads. However, given this isn't the proposed use case, will run as standard. I don't expect there to be a difference between inverted reads and those that are removed in the standard clean process.
 
