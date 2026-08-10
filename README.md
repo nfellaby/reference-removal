@@ -14,6 +14,7 @@ The following datasets were canabilised from the Deacon pre-pub [paper](https://
 - [Viral Genomes](https://zenodo.org/records/15411280): 14,861 complete NCBI RefSeq virus sequences downloaded on 2026-07-31
 - [Bacterial genomes](https://zenodo.org/records/15424142): all 1,428 complete [FDA-ARGOS bacterial reference genomes]((https://www.nature.com/articles/s41467-019-11306-6)) including plasmids, downloaded on 2026-07-31.
 - Fungal Genomes: all 5,488 complete NCBI RefSeq, downloaded on 2026-07-31.
+- Phage Genomes: Curated list of 23,122 genomes down-sampled from all Caudoviricetes on genbank that pass basic QC like <10% Ns etc. (via AK)
 
 ## Synthetic Read Generation Tools
 - Short Read, [DWGSIM](https://github.com/nh13/DWGSIM)
@@ -23,7 +24,7 @@ The following datasets were canabilised from the Deacon pre-pub [paper](https://
 Viral:
 - Tobacco Mosaic Virus ([Adela Alcolea-Medina et al., 2025](https://www.thelancet.com/journals/lanmic/article/PIIS2666-5247(25)00102-8/fulltext))
 - Hazara Virus ([Kuiama Lewandowski et al., 2019](https://pubmed.ncbi.nlm.nih.gov/31666364/))
-- Lambda Phage ([Jiayi Duan et al., 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC12633245/))
+- Lambda Phage - NC_001416.1 ([Jiayi Duan et al., 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC12633245/))
 - T1 Phage ([Zhangfan Fu et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10714923/))
 - Thermus thermophilus ([Zhangfan Fu et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10714923/))
 
@@ -410,7 +411,35 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
       - No reads present only in All_viral_bacterial.minusHazara vs All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt
       - No reads present only in All_viral_bacterial.minusHazara.combined.deacon.Hazara_filt vs All_viral_bacterial.minusHazara (sanity check)
    
+- Running with Lambda Phage (NC_001416.1): 
+   - Setting up data, AK sent all sequences combined into single fastas. Seperate them out and edit names:   
+   `seqkit split -i 2731619_genbank_qc_phage.fasta --out-dir individual_seqs`
+   `cd individual_seqs`   
+   `for f in *2731619_genbank_qc_phage.part_*; do mv "${f}" "${f//2731619_genbank_qc_phage.part_/}"; done`   
+   - Generate synthetic data for each sequence
+   - Looking at the sequences 6,554 were <3Kb in size. Removed from dataset
+   `mkdir small_seqs`
+   `while read f; do mv individual_seqs/${f} small_seqs/; done<sequences_under_3kb.txt`
+   - Generate syntetic data for phage now:
+      ```
+      for fasta in ../../phage/individual_seqs/*.fasta; do \
+      acc=$(basename "$fasta" .fasta) \
+      pbsim --seed 1 --strategy wgs --method errhmm --errhmm /home/phe.gov.uk/nicholas.ellaby/micromamba/envs/pbsim3/data/ERRHMM-ONT-HQ.model --depth 10 --genome ${fasta} --prefix ${acc} --id-prefix ${acc}__ --accuracy-mean 0.98; cat ${acc}*.fq.gz | pigz > ${acc}.fq.gz
+      done;
+      ```
+   - Combine phages, virus and bacterial into a single fq:   
+      `cat phages/*.fq.gz All_viral_bacterial.combined.fq.gz >All_viral_bacterial_phage.combined.fq.gz`
+   - Run deacon with phage references:
+      - Lambda: GCF_000840245.1, not present in original dataset. Download and generate synth reads   
+         `pbsim --seed 1 --strategy wgs --method errhmm --errhmm /home/phe.gov.uk/nicholas.ellaby/micromamba/envs/pbsim3/data/ERRHMM-ONT-HQ.model --depth 10 --genome ../phage/individual_seqs/GCF_000840245.1_ViralProj14204_genomic.fna --prefix GCF_000840245.1 --id-prefix GCF_000840245.1__ --accuracy-mean 0.98`   
+         - Combine with total dataset:
+         `cat ../synth-reads/All_viral_bacterial_phage.minus_lambda.combined.fq.gz ../synth-reads/phages/GCF_000840245.1_0001.fq.gz >>../synth-reads/All_viral_bacterial_phage.combined.fq.gz`
+         - Run Deacon to create index:   
+         `deacon index build ../phage/individual_seqs/GCF_000840245.1_ViralProj14204_genomic.fna >GCF_000840245.1_ViralProj14204.deacon.idx`
+         - Run Deacon to remove reads from `All_viral_bacterial_phage.combined.fq.gz`:
+         `deacon filter -d GCF_000840245.1_ViralProj14204.deacon.idx ../synth-reads/All_viral_bacterial_phage.combined.fq.gz -o All_viral_bacterial_phage.combined.deacon.Lambda_filt.fq.gz -s All_viral_bacterial_phage.combined.deacon.Lambda_filt.summary.json`
 
+- Running with phage MS2 (NC_001417.2):
    
 #### 2. Hostile
 - Install:  
