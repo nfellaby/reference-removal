@@ -438,6 +438,14 @@ cp reference_synth_reads/GCF_000854365.1_ViralProj15071_genomic.fna.combined.fq.
          `deacon index build ../phage/individual_seqs/GCF_000840245.1_ViralProj14204_genomic.fna >GCF_000840245.1_ViralProj14204.deacon.idx`
          - Run Deacon to remove reads from `All_viral_bacterial_phage.combined.fq.gz`:
          `deacon filter -d GCF_000840245.1_ViralProj14204.deacon.idx ../synth-reads/All_viral_bacterial_phage.combined.fq.gz -o All_viral_bacterial_phage.combined.deacon.Lambda_filt.fq.gz -s All_viral_bacterial_phage.combined.deacon.Lambda_filt.summary.json`
+            Deacon v0.15.0; mode: search; input: single; options: abs_threshold=2, rel_threshold=0.01, threads=8(4f+4c) Loaded index (k=31, w=15)
+            Retained 25827000 / 25868704 (99.83%), 138585775731 / 138916500929 (99.76%)
+
+
+         - Run Deacon to retain reads from `All_viral_bacterial_phage.combined.fq.gz`:   
+         `deacon filter GCF_000840245.1_ViralProj14204.deacon.idx ../synth-reads/All_viral_bacterial_phage.combined.fq.gz -o All_viral_bacterial_phage.combined.deacon.Lambda.fq.gz -s All_viral_bacterial_phage.combined.deacon.Lambda.summary.json`  
+            Deacon v0.15.0; mode: search; input: single; options: abs_threshold=2, rel_threshold=0.01, threads=8(4f+4c) Loaded index (k=31, w=15) in 5.32ms  
+            Retained 41704/25868704 sequences (0.161%), 330725198/138916500929 bp (0.238%) in 366.72s. 70543 seqs/s (378.8 Mbp/s)
 
 - Running with phage MS2 (NC_001417.2):
    
