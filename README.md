@@ -6,7 +6,7 @@ An additional component can be used which will test how effectively a reference 
 
 ## To Do
 - [x] Set up README    
-- [ ] Set up Nextflow config  
+- [x] Set up Nextflow config  
 - [ ] Read in reference FASTA    
 - [ ] Read in FASTA | FASTQ to remove reference from  
 - [ ] Download example FASTA to remove reference from
