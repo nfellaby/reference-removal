@@ -5,9 +5,9 @@ An application that takes in reference genome and looks to remove it from fastq 
 An additional component can be used which will test how effectively a reference is removed from either a supplied dataset or a downloaded dataset.
 
 ## To Do
-- [x] Set up README  
-- [] Set up Nextflow config
-- [] Read in reference FASTA  
+- [x] Set up README    
+- [] Set up Nextflow config  
+- [] Read in reference FASTA    
 - [] Read in FASTA | FASTQ to remove reference from  
 - [] Download example FASTA to remove reference from
 - [] Generate synthetic reads for reference FASTA [Optional]  
