@@ -1,3 +1,5 @@
+#!/usr/bin/env nextflow
+
 include { GENERATE_IDX } from '../modules/generate_idx.nf'
 
 workflow REFERENCE_PARSING{
