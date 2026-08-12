@@ -14,7 +14,7 @@ workflow {
         log.info "Detected FASTA input"
     } else if (params.reference.endsWith('.idx')) {
         log.info "Detected index input"
-    else{
+    } else{
         exit(1, "Reference input file must be either '.fasta', '.fa', or '.idx'"))
     }
 
