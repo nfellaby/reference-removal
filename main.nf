@@ -25,12 +25,12 @@ workflow {
 
     }
     else {
-        log.info "Running reference removal with ${params.reference}"
+        log.info "Running reference removal with ${params.fasta}"
         if(!params.background_samplesheet){
             exit(1, "When running reference removal please specify --background_samplesheet.")
         }
         else{
-            REFERENCE_REMOVAL(params.reference, params.background_samplesheet)
+            REFERENCE_REMOVAL(params.fasta, params.background_samplesheet)
         }
         
     }
