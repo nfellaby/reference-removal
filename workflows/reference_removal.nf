@@ -10,5 +10,4 @@ workflow REFERENCE_REMOVAL{
     main:
     // Check if reference is index file or fasta
 
-    }
 }
