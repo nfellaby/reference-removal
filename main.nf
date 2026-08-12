@@ -1,10 +1,38 @@
 #!/usr/bin/env nextflow
+include {REFERENCE_VALIDATION} from './workflows/reference_validation'
+include {REFERENCE_REMOVAL} from './workflows/reference_removal'
+
 
 workflow {
     // 1. Check User inputs
-    // Check Reference FASTA has been supplied
+    // Check Reference has been supplied
     if (!params.reference){
         exit(1, "Please specify --reference FASTA file to use.")
+    }
+    // Check reference is expected file type
+    if (params.reference.endsWith('.fasta') || params.reference.endsWith('.fa') || params.reference.endsWith('.fna')){
+        log.info "Detected FASTA input"
+    } else if (params.reference.endsWith('.idx')) {
+        log.info "Detected index input"
+    } else{
+        exit(1, "Reference input file must be either '.fasta', '.fa', or '.idx'")
+    }
+
+    // Check if performing validation?
+    if (params.validation){
+        log.info "Running reference validation with ${params.reference}"
+        REFERENCE_VALIDATION(params.reference, params.background_samplesheet)
+
+    }
+    else {
+        log.info "Running reference removal with ${params.reference}"
+        if(!params.background_samplesheet){
+            exit(1, "When running reference removal please specify --background_samplesheet.")
+        }
+        else{
+            REFERENCE_REMOVAL(params.reference, params.background_samplesheet)
+        }
+        
     }
     // Handle no background specified, download background dataset
     // if (!params.background){
