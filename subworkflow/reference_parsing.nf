@@ -23,10 +23,12 @@ workflow REFERENCE_PARSING{
         }
     } 
 
-    // If validation is specified generate synthetic reads for index
-    LONG_SYNTH_READS(fasta_fp)
+    // Generate synthetic reads for index
+    LONG_SYNTH_READS(fasta_fp, ref_id)
+    ref_long_synth = LONG_SYNTH_READS.out.long_synth_reads
 
     emit:
     ref_id
     ref_idx
+    ref_long_synth
 }

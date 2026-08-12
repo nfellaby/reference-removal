@@ -24,7 +24,11 @@ workflow {
         if (!params.fasta){
             exit(1, "Please specify --reference FASTA file to use.")
         }
-        log.info "Running reference validation with ${params.reference}"
+        log.info "Running reference validation with ${params.fasta}"
+        if (params.idx){
+            log.info "Testing with included index: ${params.idx}"
+        }
+        
         REFERENCE_VALIDATION(params.fasta, params.idx, params.background_samplesheet)
 
     }

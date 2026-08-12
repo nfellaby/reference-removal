@@ -8,3 +8,5 @@ nextflow run \
 ```
 - Created test folder
 - Added GCA_000854365.1 (TMV reference fasta)
+
+- Create test samplesheet. Includes sample_id, and fasta location

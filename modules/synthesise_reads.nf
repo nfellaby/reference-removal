@@ -12,7 +12,7 @@ process LONG_SYNTH_READS {
 
     */
 
-    container 'quay.io/biocontainers/deacon:0.16.0--h3edb6b3_0'
+    container 'quay.io/biocontainers/pbsim:1.0.3--h9948957_9'
     label 'process_medium'
     maxForks 10
 
