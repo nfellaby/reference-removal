@@ -8,7 +8,7 @@ workflow REFERENCE_PARSING{
     // Check if reference is index file or fasta
     if (reference_fp.endsWith('.fasta') || reference_fp.endsWith('.fa') || reference_fp.endsWith('.fna')) {
         log.info "Generating Deacon index file"
-        ref_id = reference_fp.simpleName
+        ref_id = file(reference_fp).simpleName
         GENERATE_IDX(reference_fp, ref_id)
         log.info"Generated Deacon index files."
     } else {

@@ -19,7 +19,7 @@ process GENERATE_IDX {
     tuple path(reference_fp), val(ref_id)
 
     output:
-    tuple val(ref_id), path("${ref_id}.deacon.idx"), emit: ref_idx
+    path("${ref_id}.deacon.idx"), emit: ref_idx
 
     script:
     """
