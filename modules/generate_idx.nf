@@ -12,7 +12,7 @@ process GENERATE_IDX {
 
     */
 
-    container 'community.wave.seqera.io/library/pip_deacon:d36cab988a962281'
+    container 'quay.io/biocontainers/deacon:0.15.0--hdd79491_0''
     label 'process_low'
 
     input:
