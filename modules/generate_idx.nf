@@ -16,7 +16,7 @@ process GENERATE_IDX {
     label 'process_low'
 
     input:
-    path(reference_fp), val(ref_id)
+    tuple path(reference_fp), val(ref_id)
 
     output:
     path("${ref_id}.deacon.idx"), emit: ref_idx

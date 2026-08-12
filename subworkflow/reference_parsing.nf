@@ -10,8 +10,8 @@ workflow REFERENCE_PARSING{
         log.info "Generating Deacon index file"
         ref_id = file(reference_fp).simpleName
         log.info "${ref_id}"
-        GENERATE_IDX(reference_fp, ref_id)
-        log.info"Generated Deacon index files."
+        // GENERATE_IDX(reference_fp, ref_id)
+        // log.info"Generated Deacon index files."
     } else {
         log.info "Detected index input"
     }
