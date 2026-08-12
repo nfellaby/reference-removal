@@ -12,7 +12,7 @@ process GENERATE_IDX {
 
     */
 
-    container 'quay.io/biocontainers/deacon:0.15.0--hdd79491_0''
+    container 'quay.io/biocontainers/deacon:0.15.0--hdd79491_0'
     label 'process_low'
 
     input:
