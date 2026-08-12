@@ -10,7 +10,7 @@ workflow {
         exit(1, "Please specify --reference FASTA file to use.")
     }
     // Check reference is expected file type
-    if (params.reference.endsWith('.fasta') || params.reference.endsWith('.fa') {
+    if (params.reference.endsWith('.fasta') || params.reference.endsWith('.fa') || params.reference.endsWith('.fna'){
         log.info "Detected FASTA input"
     } else if (params.reference.endsWith('.idx')) {
         log.info "Detected index input"
