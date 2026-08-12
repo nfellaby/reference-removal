@@ -5,7 +5,6 @@ include { GENERATE_IDX } from '../modules/generate_idx.nf'
 workflow REFERENCE_PARSING{
     take:
     reference_fp
-    background_samplesheet
 
     main:
     // Check if reference is index file or fasta
