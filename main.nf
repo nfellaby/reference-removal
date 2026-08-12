@@ -6,7 +6,7 @@ include {REFERENCE_REMOVAL} from './workflows/reference_removal'
 workflow {
     // 1. Check User inputs
     // Check Reference has been supplied
-    if (!params.reference){
+    if (!params.fasta){
         exit(1, "Please specify --reference FASTA file to use.")
     }
     // Check reference is expected file type
@@ -19,9 +19,13 @@ workflow {
     }
 
     // Check if performing validation?
-    if (params.validation){
+    if (params.fasta){
+        // Validation always requires fasta
+        if (!params.fasta){
+            exit(1, "Please specify --reference FASTA file to use.")
+        }
         log.info "Running reference validation with ${params.reference}"
-        REFERENCE_VALIDATION(params.reference, params.background_samplesheet)
+        REFERENCE_VALIDATION(params.fasta, params.idx, params.background_samplesheet)
 
     }
     else {
