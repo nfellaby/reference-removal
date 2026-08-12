@@ -10,5 +10,3 @@ workflow REFERENCE_PARSING{
         exit(1, "Reference input file must be either '.fasta', '.fa', or '.idx'"))
     }
 }
-
-}
