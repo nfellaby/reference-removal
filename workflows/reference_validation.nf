@@ -7,6 +7,7 @@ workflow REFERENCE_VALIDATION{
     background_samplesheet_fp
 
     main:
+    // Generate index files for reference
     REFERENCE_PARSING(reference_fp)
 
 
