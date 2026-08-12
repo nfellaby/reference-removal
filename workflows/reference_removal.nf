@@ -7,7 +7,7 @@ workflow REFERENCE_REMOVAL{
     background_samplesheet
 
     // Check reference input
-    main:
+    // main:
     // Check if reference is index file or fasta
 
 }
