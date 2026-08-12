@@ -1,10 +1,17 @@
 #!/usr/bin/env nextflow
+include {REFERENCE_VALIDATION} from './workflows/reference_validation'
 
 workflow {
     // 1. Check User inputs
     // Check Reference FASTA has been supplied
     if (!params.reference){
         exit(1, "Please specify --reference FASTA file to use.")
+    }
+
+    // Check if performing validation?
+    if (!params.validation){
+        REFERENCE_VALIDATION(params.reference, params.background_samplesheet)
+
     }
     // Handle no background specified, download background dataset
     // if (!params.background){
