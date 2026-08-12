@@ -24,7 +24,7 @@ process GENERATE_IDX {
 
     script:
     """
-    deacon index build '${reference_fp}' >'${ref_id}.deacon.idx
+    deacon index build ${reference_fp} >${ref_id}.deacon.idx
     """
 
 }
