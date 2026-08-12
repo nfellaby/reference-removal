@@ -9,7 +9,8 @@ workflow {
     }
 
     // Check if performing validation?
-    if (!params.validation){
+    if (params.validation){
+        logging.info "Running reference validation with ${params.reference}"
         REFERENCE_VALIDATION(params.reference, params.background_samplesheet)
 
     }
