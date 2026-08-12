@@ -34,9 +34,7 @@ process LONG_SYNTH_READS {
         --genome ${fasta_fp} \
         --prefix ${sample_id} \
         --id-prefix ${sample_id}__ \
-        --length-mean 1000 \
-        --length-max 10000 \
-        --accuracy-mean 0.98; \
+        --accuracy-mean 0.98
     """
 
 }
