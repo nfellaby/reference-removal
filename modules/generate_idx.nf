@@ -13,7 +13,7 @@ process GENERATE_IDX {
     */
 
     container 'community.wave.seqera.io/library/pip_deacon:d36cab988a962281'
-    process_low
+    label 'process_low'
 
     input:
     tuple path(reference_fp), val(ref_id)
