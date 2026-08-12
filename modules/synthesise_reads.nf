@@ -31,7 +31,7 @@ process LONG_SYNTH_READS {
         --method errhmm \
         --errhmm ${params.pbsim_model} \
         --depth 10 \
-        --genome ${fasta} \
+        --genome ${fasta_fp} \
         --prefix ${sample_id} \
         --id-prefix ${sample_id}__ \
         --length-mean 1000 \
