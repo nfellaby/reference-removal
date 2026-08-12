@@ -12,7 +12,8 @@ workflow REFERENCE_PARSING{
         log.info "Reference ID: ${ref_id}"
         GENERATE_IDX(reference_fp, ref_id)
         GENERATE_IDX.out.ref_idx.view { idx ->
-            "Generated Deacon index file: ${idx}"
+            idx_simple = file(idx).simpleName
+            "Generated Deacon index file: ${idx_simple}"
         }
     } else {
         log.info "Detected index input"
