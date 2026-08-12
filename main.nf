@@ -1,5 +1,7 @@
 #!/usr/bin/env nextflow
 include {REFERENCE_VALIDATION} from './workflows/reference_validation'
+include {REFERENCE_REMOVAL} from './workflows/reference_removal'
+
 
 workflow {
     // 1. Check User inputs
@@ -13,6 +15,16 @@ workflow {
         log.info "Running reference validation with ${params.reference}"
         REFERENCE_VALIDATION(params.reference, params.background_samplesheet)
 
+    }
+    else {
+        log.info "Running reference removal with ${params.reference}"
+        if(!params.background_samplesheet){
+            exit(1, "When running reference removal please specify --background_samplesheet.")
+        }
+        else{
+            REFERENCE_REMOVAL(params.reference, params.background_samplesheet)
+        }
+        
     }
     // Handle no background specified, download background dataset
     // if (!params.background){
