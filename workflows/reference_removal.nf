@@ -5,4 +5,6 @@ workflow REFERENCE_REMOVAL{
     reference
     background_samplesheet
 
+    // Check reference input
+
 }
