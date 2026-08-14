@@ -21,7 +21,7 @@ process LONG_SYNTH_READS {
     val(sample_id)
 
     output:
-    path("${sample_id}.fq.gz"), emit: long_synth_reads
+    path("${sample_id}.pbsim.fq.gz"), emit: long_synth_reads
 
     script:
     """
@@ -34,7 +34,9 @@ process LONG_SYNTH_READS {
         --depth 10 \
         --method errhmm \
         --errhmm ${params.pbsim_model} \
-        --accuracy-mean 0.98
+        --accuracy-mean 0.98;
+
+    cat ${sample_id}_*.fq.gz > ${sample_id}.pbsim.fq.gz
     """
 
 }
