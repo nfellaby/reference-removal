@@ -45,7 +45,7 @@ workflow REFERENCE_PARSING{
         ref_short_synth = SHORT_SYNTH_READS.out.ref_short_synth
 
         ref_short_synth.subscribe { short_ref ->
-            log.info "Generated synthetic reference short reads: ${short_ref.join(', ')"
+            log.info "Generated synthetic reference short reads: ${short_ref.join(', ')}"
         }
     }
     
