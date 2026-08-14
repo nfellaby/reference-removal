@@ -55,4 +55,5 @@ workflow REFERENCE_PARSING{
     ref_id
     ref_idx
     ref_long_synth
+    ref_short_synth
 }
