@@ -26,7 +26,7 @@ workflow SAMPLES_SETUP{
     // if not download test data
 
     // return channels
-    emit:
-    samples_ch
+    // emit:
+    // samples_ch
     
 }
