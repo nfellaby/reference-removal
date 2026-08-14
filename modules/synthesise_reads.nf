@@ -2,13 +2,13 @@
 
 process LONG_SYNTH_READS {
     /*
-        This process takes a FASTA input file and generates a deacon
-        index file, used to remove reference sequences from FASTQ data.
+         This process takes a FASTA input file and generates Synthetic Long reads using
+        PBSim
 
         Inputs:
             - FASTA filepath
         Outputs:
-            - IDX file
+            - FASTQ file
 
     */
 
@@ -37,6 +37,47 @@ process LONG_SYNTH_READS {
         --accuracy-mean 0.98;
 
     cat ${sample_id}_*.fq.gz > ${sample_id}.pbsim.fq.gz
+    """
+
+}
+
+
+process SHORT_SYNTH_READS {
+    /*
+        This process takes a FASTA input file and generates synthetic short reads using
+        DWGSIM
+
+        Inputs:
+            - FASTA filepath
+        Outputs:
+            - FASTQ file
+
+    */
+
+    container 'community.wave.seqera.io/library/dwgsim:1.1.14--b4033839f1e4b148'
+    label 'process_medium'
+    maxForks 10
+
+    input:
+    path(fasta_fp)
+    val(sample_id)
+
+    // output:
+    // path("${sample_id}.pbsim.fq.gz"), emit: ref_long_synth
+
+    script:
+    """
+        dwgsim \
+        -C 10 \
+        -1 150 \
+        -2 150 \
+        -y 0.0 \
+        -o 1 \
+        -z 1 \
+        -F 0.0 \
+        -r 0.0 \
+        -e 0.01 \
+        -E 0.01 "$fasta_fp" "$sample_id";
     """
 
 }
