@@ -12,7 +12,7 @@ workflow {
 
     // Performing Validation?
     def validation_options = ['true', 'false']
-    if (!(params.validation) in validation_options)){
+    if (!(params.validation) in validation_options){
         exit 1, "ERROR --validation must be one of ${validation_options.join(', ')} (Got '${params.validation_options}')"
     }
 
