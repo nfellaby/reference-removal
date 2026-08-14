@@ -2,7 +2,7 @@
 ```
 nextflow run \
     -latest \
-    -r feat-reference-input \
+    -r fea/background_data_setup \
     nfellaby/reference-removal \
     -profile docker 
 ```

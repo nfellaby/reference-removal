@@ -12,7 +12,7 @@ process LONG_SYNTH_READS {
 
     */
 
-    container 'quay.io/biocontainers/pbsim:1.0.3--h9948957_9'
+    container 'community.wave.seqera.io/library/pbsim3:3.0.5--86541aa3eccd4c3c'
     label 'process_medium'
     maxForks 10
 
@@ -26,14 +26,14 @@ process LONG_SYNTH_READS {
     script:
     """
     pbsim \
-        --seed 1 \
-        --strategy wgs \
-        --method errhmm \
-        --errhmm ${params.pbsim_model} \
-        --depth 10 \
-        --genome ${fasta_fp} \
         --prefix ${sample_id} \
         --id-prefix ${sample_id}__ \
+        --seed 1 \
+        --strategy wgs \
+        --genome ${fasta_fp} \
+        --depth 10 \
+        --method errhmm \
+        --errhmm ${params.pbsim_model} \
         --accuracy-mean 0.98
     """
 
