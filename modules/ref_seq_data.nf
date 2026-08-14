@@ -19,6 +19,9 @@ process DOWNLOAD_REFSEQ_GENOMES {
         --assembly-level complete \\
         --include genome \\
         --filename ${taxon}.zip
-    ...
+    unzip -q ${taxon}.zip -d ${taxon}_extracted
+    mkdir -p ${taxon}_genomes
+    find ${taxon}_extracted/ncbi_dataset/data -name '*.fna' -print0 | \\
+        xargs -0 -I{} sh -c 'gzip -c "{}" > ${taxon}_genomes/\$(basename {}).gz'
     """
 }
