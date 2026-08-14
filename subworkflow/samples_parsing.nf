@@ -1,5 +1,5 @@
 #!/usr/bin/env nextflow
-include { DOWNLOAD_REFSEQ_GENOMES } from '../modules/ref_seq_data'
+include { DOWNLOAD_GENOMES } from '../modules/ref_seq_data'
 
 workflow SAMPLES_SETUP{
     take:
@@ -64,7 +64,7 @@ workflow SAMPLES_SETUP{
 
         DOWNLOAD_GENOME(accessions_ch)
 
-        
+
 
         // // Flatten [taxon, [genome1, genome2, ...]] -> one emission per genome, tagged with an id
         // def per_genome_ch = reference_genomes_ch
