@@ -10,8 +10,13 @@ workflow {
         exit(1, "Please specify --fasta FASTA file to use.")
     }
 
-    // Check if performing validation?
-    if (params.fasta){
+    // Performing Validation?
+    def validation_options = ['true', 'false']
+    if (!(params.validation) in validation_options)){
+        exit 1, "ERROR --validation must be one of ${validation_options.join(', ')} (Got '${params.validation_options}')"
+    }
+
+    if (params.validation){
         // Validation always requires fasta
         if (!params.fasta){
             exit(1, "Please specify --reference FASTA file to use.")
@@ -27,16 +32,16 @@ workflow {
         }
         log.info "Generating ${params.read_length} read synthetic data. Designated by --read_length, default='long', options='short','long','both'"
 
-        REFERENCE_VALIDATION(params.fasta, params.idx, params.background_samplesheet, params.read_length)
+        REFERENCE_VALIDATION(params.fasta, params.idx, params.samplesheet, params.read_length)
 
     }
     else {
         log.info "Running reference removal with ${params.fasta}"
-        if(!params.background_samplesheet){
+        if(!params.samplesheet){
             exit(1, "When running reference removal please specify --background_samplesheet.")
         }
         else{
-            REFERENCE_REMOVAL(params.fasta, params.background_samplesheet)
+            REFERENCE_REMOVAL(params.fasta, params.samplesheet)
         }
         
     }
