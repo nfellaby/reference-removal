@@ -3,10 +3,11 @@
 process DOWNLOAD_REFSEQ_GENOMES {
     tag "${taxon}"
     label 'process_low'
+    container 'staphb/ncbi-datasets:16.36.0'   // pin a specific version, not 'latest'
     publishDir "${params.outdir}/reference_genomes", mode: 'copy'
 
     input:
-    val taxon   // e.g. 'bacteria' or 'viruses'
+    val taxon
 
     output:
     tuple val(taxon), path("${taxon}_genomes/*.fna.gz"), emit: genomes
@@ -18,11 +19,6 @@ process DOWNLOAD_REFSEQ_GENOMES {
         --assembly-level complete \\
         --include genome \\
         --filename ${taxon}.zip
-
-    unzip -q ${taxon}.zip -d ${taxon}_extracted
-    mkdir -p ${taxon}_genomes
-    find ${taxon}_extracted/ncbi_dataset/data -name '*.fna' -exec gzip -c {} \\; > /dev/null
-    find ${taxon}_extracted/ncbi_dataset/data -name '*.fna' -print0 | \\
-        xargs -0 -I{} sh -c 'gzip -c "{}" > ${taxon}_genomes/\$(basename {}).gz'
+    ...
     """
 }
