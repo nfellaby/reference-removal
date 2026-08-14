@@ -21,6 +21,12 @@ workflow {
             log.info "Testing with included index: ${params.idx}"
         }
 
+        def valid_read_length = ['short', 'long', 'both']
+        if (!(params.read_length in valid_read_length)){
+            exit 1, "ERROR: --read_length must be one of ${valid_read_length.join(', ')} (got '${params.read_length}')"
+        }
+        log.info "Generating ${params.read_length} read synthetic data. Designated by --read_length, default='long', options='short','long','both'"
+
         REFERENCE_VALIDATION(params.fasta, params.idx, params.background_samplesheet)
 
     }
