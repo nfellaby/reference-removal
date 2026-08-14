@@ -42,7 +42,7 @@ workflow REFERENCE_PARSING{
     }
     if (read_length  in  short_reads){
         SHORT_SYNTH_READS(fasta_fp, ref_id)
-        ref_short_synth = LONG_SYNTH_READS.out.ref_short_synth
+        ref_short_synth = SHORT_SYNTH_READS.out.ref_short_synth
 
         ref_short_synth.subscribe { short_ref ->
             log.info "Generated synthetic reference short reads: ${ref_short_synth}"
