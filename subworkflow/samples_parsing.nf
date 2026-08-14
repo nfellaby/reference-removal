@@ -57,8 +57,36 @@ workflow SAMPLES_SETUP{
 
         def taxa_ch = Channel.of('bacteria', 'viruses')
         reference_genomes_ch = DOWNLOAD_REFSEQ_GENOMES(taxa_ch).genomes
-        reference_genomes_ch.subscribe { taxon, genomes ->
-            log.info "Downloaded ${genomes.size()} genome(s) for taxon '${taxon}'"
-        }
+
+        // // Flatten [taxon, [genome1, genome2, ...]] -> one emission per genome, tagged with an id
+        // def per_genome_ch = reference_genomes_ch
+        //     .flatMap { taxon, genome_paths ->
+        //         genome_paths.collect { g ->
+        //             def genome_id = g.getBaseName().replaceAll(/\.fna(\.gz)?$/, '')
+        //             tuple(genome_id, g)
+        //         }
+        //     }
+        
+        // if (params.read_length in ['short', 'both']) {
+        //     short_synth_reads_ch = SHORT_SYNTH_READS(per_genome_ch).reads
+        //     short_synth_reads_ch.subscribe { id, r1, r2 ->
+        //         log.info "Generated short synthetic reads for ${id}: ${r1}, ${r2}"
+        //     }
+        // }
+
+        // if (params.read_length in ['long', 'both']) {
+        //     long_synth_reads_ch = LONG_SYNTH_READS(per_genome_ch).reads
+        //     long_synth_reads_ch.subscribe { id, reads ->
+        //         log.info "Generated long synthetic reads for ${id}: ${reads}"
+        //     }
+        // }
+
     }
+
+    emit:
+    single_end          = single_end_ch
+    paired_end           = paired_end_ch
+    // reference_genomes    = reference_genomes_ch
+    // short_synth_reads     = short_synth_reads_ch
+    // long_synth_reads      = long_synth_reads_ch
 }
