@@ -5,8 +5,8 @@ include { LONG_SYNTH_READS } from '../modules/synthesise_reads'
 
 workflow REFERENCE_PARSING{
     take:
-    path(fasta_fp)
-    val(read_length)
+    fasta_fp
+    read_length
 
     main:
     // Check if reference is index file or fasta
@@ -29,7 +29,7 @@ workflow REFERENCE_PARSING{
     // Generate synthetic reads for index
     ref_long_synth = null
     ref_short_synth = null
-    
+
     if (read_length  in  long_reads){
             LONG_SYNTH_READS(fasta_fp, ref_id)
             ref_long_synth = LONG_SYNTH_READS.out.ref_long_synth
