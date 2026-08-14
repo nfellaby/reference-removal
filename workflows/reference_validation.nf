@@ -8,12 +8,13 @@ workflow REFERENCE_VALIDATION{
     idx
     background_samplesheet_fp
     read_length
+    test_accessions
 
     main:
     // Generate index files for reference
     REFERENCE_PARSING(fasta, read_length)
     // Set up background data
-    SAMPLES_SETUP(background_samplesheet_fp)
+    SAMPLES_SETUP(background_samplesheet_fp, test_accessions)
 
 
 }

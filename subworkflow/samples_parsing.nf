@@ -4,6 +4,7 @@ include { DOWNLOAD_REFSEQ_GENOMES } from '../modules/ref_seq_data'
 workflow SAMPLES_SETUP{
     take:
     samplesheet_fp
+    test_accessions
 
     main:
     // Declare channels up front so they're visible outside the if/else
@@ -55,8 +56,15 @@ workflow SAMPLES_SETUP{
     else{
         log.info "No samplesheet provided with --samplesheet, downloading test data for validation instead.."
 
-        def taxa_ch = Channel.of('bacteria', 'viruses')
-        reference_genomes_ch = DOWNLOAD_REFSEQ_GENOMES(taxa_ch).genomes
+         accessions_ch = Channel
+            .fromPath(params.accessions)
+            .splitText()
+            .map { it.trim() }
+            .filter { it && !it.startsWith('#') }
+
+        DOWNLOAD_GENOME(accessions_ch)
+
+        
 
         // // Flatten [taxon, [genome1, genome2, ...]] -> one emission per genome, tagged with an id
         // def per_genome_ch = reference_genomes_ch
