@@ -4,6 +4,14 @@ An application that takes in reference genome and looks to remove it from fastq 
 
 An additional component can be used which will test how effectively a reference is removed from either a supplied dataset or a downloaded dataset.
 
+## Validation
+## Input data
+- Reference FASTA (required)
+- Reference IDX. Index created by Deacon (Optional)
+- Samplesheet (Optional)
+    - Column 1: Sample ID; Column 2: Read 1; Column 3: Read 2 (for paired-end only)
+
+
 ## To Do
 - [x] Set up README    
 - [x] Set up Nextflow config  
