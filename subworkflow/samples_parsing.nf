@@ -15,8 +15,7 @@ workflow SAMPLES_SETUP{
     if (samplesheet_fp){
         def parsed_ch = Channel
             .fromPath(samplesheet_fp)
-            .splitCsv(header: false)
-            .skip(1)   // drop header row; column names unknown/irrelevant
+            .splitCsv(header: false, skip: 1)  // drop header row; column names unknown/irrelevant
             .map { row ->
                 if (row.size() < 2) {
                     exit 1, "ERROR: Malformed row in samplesheet (${samplesheet_fp}): ${row}"
