@@ -1,5 +1,5 @@
 #!/usr/bin/env nextflow
-include { DOWNLOAD_GENOMES } from '../modules/ref_seq_data'
+include { DOWNLOAD_GENOME } from '../modules/ref_seq_data'
 
 workflow SAMPLES_SETUP{
     take:
