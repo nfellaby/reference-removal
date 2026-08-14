@@ -31,8 +31,13 @@ workflow REFERENCE_PARSING{
     ref_short_synth = null
 
     if (read_length  in  long_reads){
-            LONG_SYNTH_READS(fasta_fp, ref_id)
-            ref_long_synth = LONG_SYNTH_READS.out.ref_long_synth
+        LONG_SYNTH_READS(fasta_fp, ref_id)
+        ref_long_synth = LONG_SYNTH_READS.out.ref_long_synth
+
+        ref_long_synth.subscribe { long_ref ->
+            long_ref_simp = file(long_ref).baseName
+            log.info "Generated synthetic reference long reads: ${long_ref_simp}"
+        }
     }
     
     
