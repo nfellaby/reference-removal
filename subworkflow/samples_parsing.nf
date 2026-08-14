@@ -13,9 +13,13 @@ workflow SAMPLES_SETUP{
 
     // Check if background data samplesheet has been supplied
     if (samplesheet_fp){
+        // Handle either tsv or csv
+        def sep_char = samplesheet_fp.toString().toLowerCase().endsWith('.tsv') ? '\t' : ','
+
+
         def parsed_ch = Channel
             .fromPath(samplesheet_fp)
-            .splitCsv(header: false, skip: 1)  // drop header row; column names unknown/irrelevant
+            .splitCsv(header: false, skip: 1, sep: sep_char)  // drop header row; column names unknown/irrelevant
             .map { row ->
                 if (row.size() < 2) {
                     exit 1, "ERROR: Malformed row in samplesheet (${samplesheet_fp}): ${row}"
