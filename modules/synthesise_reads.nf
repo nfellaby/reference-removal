@@ -63,7 +63,7 @@ process SHORT_SYNTH_READS {
     val(sample_id)
 
     output:
-    tuple path(path("${sample_id}.bwa.read1.fastq.gz"), path("${sample_id}.bwa.read2.fastq.gz"), emit: ref_short_synth
+    tuple path("${sample_id}.bwa.read1.fastq.gz"), path("${sample_id}.bwa.read2.fastq.gz"), emit: ref_short_synth
 
     script:
     """
