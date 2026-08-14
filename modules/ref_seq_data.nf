@@ -3,7 +3,7 @@
 process DOWNLOAD_REFSEQ_GENOMES {
     tag "${taxon}"
     label 'process_low'
-    container 'community.wave.seqera.io/library/ncbi-datasets-cli:18.35.0--21225b8906124161'   // pin a specific version, not 'latest'
+    conda 'bioconda::ncbi-datasets-cli=18.35.0'
     publishDir "${params.outdir}/reference_genomes", mode: 'copy'
 
     input:
