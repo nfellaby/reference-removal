@@ -9,6 +9,7 @@ An additional component can be used which will test how effectively a reference 
 - Reference FASTA (required)
 - Reference IDX. Index created by Deacon (Optional)
 - Samplesheet (Optional)
+    - Row one should be a header with column names
     - Column 1: Sample ID; Column 2: Read 1; Column 3: Read 2 (for paired-end only)
 
 
