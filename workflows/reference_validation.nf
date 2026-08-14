@@ -7,10 +7,11 @@ workflow REFERENCE_VALIDATION{
     fasta
     idx
     background_samplesheet_fp
+    read_length
 
     main:
     // Generate index files for reference
-    REFERENCE_PARSING(fasta)
+    REFERENCE_PARSING(fasta, read_length)
     // Set up background data
     SAMPLES_SETUP(background_samplesheet_fp)
 

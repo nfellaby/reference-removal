@@ -27,7 +27,7 @@ workflow {
         }
         log.info "Generating ${params.read_length} read synthetic data. Designated by --read_length, default='long', options='short','long','both'"
 
-        REFERENCE_VALIDATION(params.fasta, params.idx, params.background_samplesheet)
+        REFERENCE_VALIDATION(params.fasta, params.idx, params.background_samplesheet, params.read_length)
 
     }
     else {

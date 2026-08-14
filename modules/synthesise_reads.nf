@@ -21,7 +21,7 @@ process LONG_SYNTH_READS {
     val(sample_id)
 
     output:
-    path("${sample_id}.pbsim.fq.gz"), emit: long_synth_reads
+    path("${sample_id}.pbsim.fq.gz"), emit: ref_long_synth
 
     script:
     """
