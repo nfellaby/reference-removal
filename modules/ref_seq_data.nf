@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 process DOWNLOAD_GENOME {
-    tag "${taxon}"
+    // tag "${taxon}"
     label 'process_low'
     maxForks 10
     conda 'bioconda::ncbi-datasets-cli=18.35.0'
