@@ -57,7 +57,7 @@ workflow SAMPLES_SETUP{
         // Generate a channel for each of the FASTA files in the directory
         bg_fasta_ch = Channel
             .fromPath("${background_data_dir}/**/*.fa*")
-            .mix(Channel.fromPath("${params.fasta_dir}/**/*.fna*")))
+            .mix(Channel.fromPath("${params.fasta_dir}/**/*.fna*"))
             .set { fasta_ch }
         bg_fasta_ch.view()
     } else{
