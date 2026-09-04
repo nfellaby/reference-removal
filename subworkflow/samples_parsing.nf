@@ -56,7 +56,7 @@ workflow SAMPLES_SETUP{
         log.info "Specified test data directory  ${background_data_dir}. Will use FASTA files found within directory to generate synthetic data."  
         // Generate a channel for each of the FASTA files in the directory
         Channel
-            .fromPath("${background_data_dir}/**/*.fna")
+            .fromPath("${background_data_dir}/**/*.{fa,fasta,fas,fna,fa.gz,fasta.gz,fas.gz,fna.gz}")
             .set { fasta_ch }
         fasta_ch.view()
     } else{
