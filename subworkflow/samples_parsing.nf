@@ -91,7 +91,6 @@ workflow SAMPLES_SETUP{
         //     }
         // }
 
-    }
 
     emit:
     single_end          = single_end_ch
