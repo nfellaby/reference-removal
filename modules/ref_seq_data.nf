@@ -4,7 +4,7 @@ process DOWNLOAD_GENOME {
     // tag "${taxon}"
     label 'process_low'
     maxForks 10
-    conda 'bioconda::ncbi-datasets-cli=18.35.0'
+    container 'community.wave.seqera.io/library/ncbi-datasets-cli:18.36.0--c90bc402d344df10'
     publishDir "${params.outdir}/reference_genomes", mode: 'copy'
 
     input:
