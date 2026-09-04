@@ -4,7 +4,7 @@ include { DOWNLOAD_GENOME } from '../modules/ref_seq_data'
 workflow SAMPLES_SETUP{
     take:
     samplesheet_fp
-    test_accessions
+    background_data_dir
 
     main:
     // Declare channels up front so they're visible outside the if/else
@@ -52,17 +52,19 @@ workflow SAMPLES_SETUP{
 
         single_end_ch.subscribe { sample_id, read1 -> log.info "Single-end sample: ${sample_id} -> ${read1}" }
         paired_end_ch.subscribe { sample_id, reads -> log.info "Paired-end sample: ${sample_id} -> ${reads.join(', ')}" }   
+    } else if(background_data_dir){
+        log.info "Specified test data directory. Will use FASTA files found within directory to generate synthetic data."        
+
+    } else{
+        exit(1, "No samplesheet provided with --samplesheet or directory specified with --test_data. Please provide one.")
     }
-    else{
-        log.info "No samplesheet provided with --samplesheet, downloading test data for validation instead.."
+        //  test_accessions_ch = Channel
+        //     .fromPath(params.test_accessions)
+        //     .splitText()
+        //     .map { it.trim() }
+        //     .filter { it && !it.startsWith('#') }
 
-         test_accessions_ch = Channel
-            .fromPath(params.test_accessions)
-            .splitText()
-            .map { it.trim() }
-            .filter { it && !it.startsWith('#') }
-
-        DOWNLOAD_GENOME(test_accessions_ch)
+        // DOWNLOAD_GENOME(test_accessions_ch)
 
 
 
