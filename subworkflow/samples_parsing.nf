@@ -56,13 +56,13 @@ workflow SAMPLES_SETUP{
     else{
         log.info "No samplesheet provided with --samplesheet, downloading test data for validation instead.."
 
-         accessions_ch = Channel
-            .fromPath(params.accessions)
+         test_accessions_ch = Channel
+            .fromPath(params.test_accessions)
             .splitText()
             .map { it.trim() }
             .filter { it && !it.startsWith('#') }
 
-        DOWNLOAD_GENOME(accessions_ch)
+        DOWNLOAD_GENOME(test_accessions_ch)
 
 
 
