@@ -8,7 +8,7 @@ process DOWNLOAD_GENOME {
     publishDir "${params.outdir}/reference_genomes", mode: 'copy'
 
     input:
-    path(accesions_list)
+    val(accession)
 
     output:
     tuple val(taxon), path("${taxon}_genomes/*.fna.gz"), emit: genomes

@@ -62,9 +62,7 @@ workflow SAMPLES_SETUP{
             .map { it.trim() }
             .filter { it && !it.startsWith('#') }
 
-        test_accessions_ch.view()
-
-        // DOWNLOAD_GENOME(test_accessions_ch)
+        DOWNLOAD_GENOME(test_accessions_ch)
 
 
 
