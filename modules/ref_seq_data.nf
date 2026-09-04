@@ -10,8 +10,8 @@ process DOWNLOAD_GENOME {
     input:
     val(accession)
 
-    output:
-    tuple val(taxon), path("${taxon}_genomes/*.fna.gz"), emit: genomes
+    // output:
+    // tuple val(taxon), path("${taxon}_genomes/*.fna.gz"), emit: genomes
 
     script:
     """
