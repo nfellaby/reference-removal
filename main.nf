@@ -32,10 +32,10 @@ workflow {
         log.info "Generating ${params.read_length} read synthetic data. Designated by --read_length, default='long', options='short','long','both'"
 
         // Validation requires either samplesheet or test-directory
-        if (!params.samplesheet || !params.test-directory){
-            exit(1, "Validation requires either samplesheet or test-directory")
+        if (!params.samplesheet || !params.test_directory){
+            exit(1, "Validation requires either samplesheet or test_directory")
         }
-        REFERENCE_VALIDATION(params.fasta, params.idx, params.samplesheet, params.test_data_dir, params.read_length)
+        REFERENCE_VALIDATION(params.fasta, params.idx, params.samplesheet, params.test_directory, params.read_length)
 
     }
     else {
