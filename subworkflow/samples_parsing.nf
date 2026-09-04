@@ -55,10 +55,10 @@ workflow SAMPLES_SETUP{
     } else if(background_data_dir){
         log.info "Specified test data directory  ${background_data_dir}. Will use FASTA files found within directory to generate synthetic data."  
         // Generate a channel for each of the FASTA files in the directory
-        bg_fasta_ch = Channel
+        Channel
             .fromPath("${background_data_dir}/**/*.fna")
             .set { fasta_ch }
-        bg_fasta_ch.view()
+        fasta_ch.view()
     } else{
         exit(1, "No samplesheet provided with --samplesheet or directory specified with --test_data. Please provide one.")
     }
