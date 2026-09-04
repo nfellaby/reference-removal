@@ -53,9 +53,8 @@ workflow SAMPLES_SETUP{
         single_end_ch.subscribe { sample_id, read1 -> log.info "Single-end sample: ${sample_id} -> ${read1}" }
         paired_end_ch.subscribe { sample_id, reads -> log.info "Paired-end sample: ${sample_id} -> ${reads.join(', ')}" }   
     } else if(background_data_dir){
-        log.info "Specified test data directory. Will use FASTA files found within directory to generate synthetic data."  
+        log.info "Specified test data directory  ${background_data_dir}. Will use FASTA files found within directory to generate synthetic data."  
         // Generate a channel for each of the FASTA files in the directory
-        background_data_dir.view()
         // bg_fasta_ch = Channel
         //     .fromPath("${background_data_dir}/**/*.fa*")
         //     .set { fasta_ch }
