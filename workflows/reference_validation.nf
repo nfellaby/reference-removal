@@ -14,7 +14,7 @@ workflow REFERENCE_VALIDATION{
     // Generate index files for reference
     REFERENCE_PARSING(fasta, read_length)
     // Set up background data
-    SAMPLES_SETUP(background_samplesheet_fp, background_data_dir)
+    SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_length)
 
 
 }

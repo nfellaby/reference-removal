@@ -5,6 +5,7 @@ workflow SAMPLES_SETUP{
     take:
     samplesheet_fp
     background_data_dir
+    read_length
 
     main:
     // Declare channels up front so they're visible outside the if/else
@@ -58,7 +59,13 @@ workflow SAMPLES_SETUP{
         Channel
             .fromPath("${background_data_dir}/**/*.{fa,fasta,fas,fna,fa.gz,fasta.gz,fas.gz,fna.gz}")
             .set { fasta_ch }
-        fasta_ch.view()
+        fasta_ch
+            .map { fasta -> tuple(fasta, read_length) }
+            .set { fasta_meta_ch }
+        fasta_meta_ch.view()
+        // Generate Synthetic reads for each fasta
+
+
     } else{
         exit(1, "No samplesheet provided with --samplesheet or directory specified with --test_data. Please provide one.")
     }
