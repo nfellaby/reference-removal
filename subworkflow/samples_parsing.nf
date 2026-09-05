@@ -1,7 +1,6 @@
 #!/usr/bin/env nextflow
-// include { DOWNLOAD_GENOME } from '../modules/ref_seq_data'
-include { LONG_SYNTH_READS } from '../modules/synthesise_reads'
-include { SHORT_SYNTH_READS } from '../modules/synthesise_reads'
+include { LONG_SYNTH_READS; SHORT_SYNTH_READS } from '../modules/synthesise_reads'
+
 
 workflow SAMPLES_SETUP{
     take:
