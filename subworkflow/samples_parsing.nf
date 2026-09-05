@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 include { LONG_SYNTH_READS; SHORT_SYNTH_READS } from '../modules/synthesise_reads'
-
+include { POOL_LONG_READS; POOL_SHORT_READS }   from '../modules/pool_reads'
 
 workflow SAMPLES_SETUP{
     take:
@@ -98,7 +98,10 @@ workflow SAMPLES_SETUP{
         if (read_length in long_reads) {
             POOL_LONG_READS(long_synth_reads_ch.collect())
             synthetic_metagenome_long_ch = POOL_LONG_READS.out.pooled
+            synthetic_metagenome_long_ch.view()
         }
+
+        
 
         if (read_length in short_reads) {
             // toList() (not collect()) — collect() flattens the r1/r2 tuple
@@ -109,6 +112,7 @@ workflow SAMPLES_SETUP{
             }
             POOL_SHORT_READS(short_split.r1.toList(), short_split.r2.toList())
             synthetic_metagenome_short_ch = POOL_SHORT_READS.out.pooled
+            synthetic_metagenome_short_ch.view()
         }
 
 
