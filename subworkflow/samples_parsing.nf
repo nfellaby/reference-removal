@@ -1,5 +1,7 @@
 #!/usr/bin/env nextflow
-include { DOWNLOAD_GENOME } from '../modules/ref_seq_data'
+// include { DOWNLOAD_GENOME } from '../modules/ref_seq_data'
+include { LONG_SYNTH_READS } from '../modules/synthesise_reads'
+include { SHORT_SYNTH_READS } from '../modules/synthesise_reads'
 
 workflow SAMPLES_SETUP{
     take:
@@ -60,8 +62,55 @@ workflow SAMPLES_SETUP{
             .fromPath("${background_data_dir}/**/*.{fa,fasta,fas,fna,fa.gz,fasta.gz,fas.gz,fna.gz}")
             .set { fasta_ch }
 
-        // Generate Synthetic reads for each fasta
+        // Derive a sample_id per fasta and fan out into two lock-step channels
+        // (multiMap keeps them correctly paired per-item, unlike calling .map
+        // twice on the same source channel)
+        def synth_input = fasta_ch.multiMap { fasta ->
+            fasta:     fasta
+            sample_id: fasta.getBaseName().replaceAll(/\.(fa|fasta|fas|fna)(\.gz)?$/, '')
+        }
 
+        def long_reads  = ['long', 'both']
+        def short_reads = ['short', 'both']
+
+        long_synth_reads_ch  = Channel.empty()
+        short_synth_reads_ch = Channel.empty()
+
+        if (read_length in long_reads) {
+            LONG_SYNTH_READS(synth_input.fasta, synth_input.sample_id)
+            long_synth_reads_ch = LONG_SYNTH_READS.out.ref_long_synth
+
+            long_synth_reads_ch.subscribe { r ->
+                log.info "Generated synthetic long reads: ${r}"
+            }
+        }
+
+        if (read_length in short_reads) {
+            SHORT_SYNTH_READS(synth_input.fasta, synth_input.sample_id)
+            short_synth_reads_ch = SHORT_SYNTH_READS.out.ref_short_synth
+
+            short_synth_reads_ch.subscribe { r1, r2 ->
+                log.info "Generated synthetic short reads: ${r1}, ${r2}"
+            }
+        }
+
+        // Pool every background genome's synthetic reads into one synthetic
+        // metagenomic sample
+        if (read_length in long_reads) {
+            POOL_LONG_READS(long_synth_reads_ch.collect())
+            synthetic_metagenome_long_ch = POOL_LONG_READS.out.pooled
+        }
+
+        if (read_length in short_reads) {
+            // toList() (not collect()) — collect() flattens the r1/r2 tuple
+            // by default and you'd lose the pairing between R1/R2 lists.
+            def short_split = short_synth_reads_ch.multiMap { r1, r2 ->
+                r1: r1
+                r2: r2
+            }
+            POOL_SHORT_READS(short_split.r1.toList(), short_split.r2.toList())
+            synthetic_metagenome_short_ch = POOL_SHORT_READS.out.pooled
+        }
 
 
     } else{
