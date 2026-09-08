@@ -14,10 +14,13 @@ def trim_read_id(read_id):
     return read_id
 
 
-def get_ids(fastq_path):
-    return {
-        trim_read_id(name) for name, *_ in pyfastx.Fastq(fastq_path, build_index=False)
-    }
+def get_ids(fastq_paths):
+    ids = set()
+    for path in fastq_paths:
+        ids |= {
+            trim_read_id(name) for name, *_ in pyfastx.Fastq(path, build_index=False)
+        }
+    return ids
 
 
 def main():
@@ -25,19 +28,27 @@ def main():
     p.add_argument("--sample-id", required=True)
     p.add_argument("--read-type", required=True, choices=["long", "short"])
     p.add_argument(
-        "--reference-fastq", required=True, help="pre-spike synthetic reference reads"
+        "--reference-fastq",
+        required=True,
+        nargs="+",
+        help="pre-spike synthetic reference reads",
     )
     p.add_argument(
-        "--background-fastq", required=True, help="pre-spike background reads"
+        "--background-fastq",
+        required=True,
+        nargs="+",
+        help="pre-spike background reads",
     )
     p.add_argument(
         "--isolate-fastq",
         required=True,
+        nargs="+",
         help="deacon SAMPLE_REMOVAL output (matched reads)",
     )
     p.add_argument(
         "--depleted-fastq",
         required=True,
+        nargs="+",
         help="deacon REFERENCE_REMOVAL output (kept/background)",
     )
     p.add_argument(
