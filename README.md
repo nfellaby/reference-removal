@@ -19,11 +19,11 @@ An additional component can be used which will test how effectively a reference 
 - [x] Set up Nextflow config  
 - [x] Read in reference FASTA    
 - [x] Read in FASTA | FASTQ to remove reference from  
-- [ ] Provide test FASTQ to remove reference from
-- [ ] Validate test FASTQ with Synthetic read generation
+- [x] Provide test FASTQ to remove reference from
 - [x] Generate synthetic reads for reference FASTA [Optional]  
-- [ ] Generate synthetic reads for background FASTA [Optional]  
-- [ ] Spike reference reads into into background FASTQ [Optional]  
+- [x] Spike reference reads into into background FASTQ [Optional]  
 - [x] Generate index for Reference FASTA
-- [ ] Remove reference from background FASTQ
-- [ ] Generate summary statistics
+- [x] Remove reference from background FASTQ
+- [x] Generate summary statistics
+- [ ] Generate summary report
+- [ ] Complete process for only removing reference i.e. not validation
