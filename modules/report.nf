@@ -35,7 +35,8 @@ process AGGREGATE_REPORT {
 
     output:
     path("validation_report.html"), emit: report
+    path("validation_report.pdf"),  emit: report_pdf
 
     script:
-    "build_html_report.py --jsons ${confusion_jsons} -o validation_report.html"
+    "build_report.py --jsons ${confusion_jsons} -o validation_report.html"
 }
