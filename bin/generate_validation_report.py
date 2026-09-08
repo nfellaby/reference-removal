@@ -9,7 +9,7 @@ import pyfastx
 
 
 def trim_read_id(read_id):
-    if read_id.endswith("/1") or read_id.endswith("/2"):
+    if read_id.endswith(("/1", "/2")):
         read_id = read_id[:-2]
     return read_id
 
