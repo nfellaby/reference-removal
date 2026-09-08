@@ -30,8 +30,8 @@ process LONG_REFERENCE_REMOVAL {
         filter \
         -d ${ref_idx} \
         ${fastq_fp} \
-        -s ${sample_id}.ref_removed.json \
-        -o ${sample_id}.ref_removed.fq.gz \
+        -s ${sample_id}.sample_summary.json \
+        -o ${sample_id}.sample_reads.fq.gz \
         -t ${task.cpus}
     """
 }
@@ -68,8 +68,8 @@ process LONG_SAMPLE_REMOVAL {
         filter \
         ${ref_idx} \
         ${fastq_fp} \
-        -s ${sample_id}.ref_reads_only.json \
-        -o ${sample_id}.ref_reads_only.fq.gz \
+        -s ${sample_id}.reference_summary.json \
+        -o ${sample_id}.reference_reads.fq.gz \
         -t ${task.cpus}
     """
 }
@@ -109,9 +109,9 @@ process PAIRED_REFERENCE_REMOVAL {
         -d ${ref_idx} \
         ${fastq_r1_fp} \
         ${fastq_r2_fp} \
-        -s ${sample_id}.ref_removed.json \
-        -o ${sample_id}.ref_reads_only.R1.fq.gz \
-        -o ${sample_id}.ref_reads_only.R2.fq.gz \
+        -s ${sample_id}.sample_summary.json \
+        -o ${sample_id}.sample_reads.R1.fq.gz \
+        -o ${sample_id}.sample_reads.R2.fq.gz \
         -t ${task.cpus}
     """
 }
@@ -148,9 +148,9 @@ process PAIRED_SAMPLE_REMOVAL {
         ${ref_idx} \
         ${fastq_r1_fp} \
         ${fastq_r2_fp} \
-        -s ${sample_id}.ref_reads_only.json \
-        -o ${sample_id}.ref_reads_only.R1.fq.gz \
-        -o ${sample_id}.ref_reads_only.R2.fq.gz \
+        -s ${sample_id}.reference_summary.json \
+        -o ${sample_id}.reference_reads.R1.fq.gz \
+        -o ${sample_id}.reference_reads.R2.fq.gz \
         -t ${task.cpus}
     """
 }
