@@ -21,8 +21,8 @@ workflow FILTER_READS {
     PAIRED_SAMPLE_REMOVAL(spiked_short, idx_ch)
 
     emit:
-    long_depleted   = LONG_REFERENCE_REMOVAL.out.ref_removed_summary   // depleted background — should be reference-free
-    long_ref_only   = LONG_SAMPLE_REMOVAL.out.ref_reads_only_summary   // isolated matches — should be ~exactly the spiked reference reads
-    short_depleted  = PAIRED_REFERENCE_REMOVAL.out.ref_removed
-    short_ref_only  = PAIRED_SAMPLE_REMOVAL.out.ref_reads_only
+    long_depleted   = LONG_REFERENCE_REMOVAL.out.long_depleted   // depleted background — should be reference-free
+    long_ref_only   = LONG_SAMPLE_REMOVAL.out.long_ref_only   // isolated matches — should be ~exactly the spiked reference reads
+    short_depleted  = PAIRED_REFERENCE_REMOVAL.out.short_depleted
+    short_ref_only  = PAIRED_SAMPLE_REMOVAL.out.short_ref_only
 }
