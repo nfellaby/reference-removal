@@ -14,10 +14,10 @@ workflow VALIDATION_REPORT {
     def joined = background_truth
         .join(isolate_out)
         .join(depleted_out)
-        .map { sample_id, bg, iso_json, iso_fq, dep_json, dep_fq ->
-            tuple(sample_id, read_type, reference_truth, bg, iso_fq, dep_fq, iso_json)
+        .combine(reference_truth)
+        .map { sample_id, bg, iso_json, iso_fq, dep_json, dep_fq, ref_fastq ->
+            tuple(sample_id, read_type, ref_fastq, bg, iso_fq, dep_fq, iso_json)
         }
-        .combine(reference_truth)   // broadcasts the single shared reference fastq to every sample
 
     GENERATE_VALIDATION_REPORT(joined)
     AGGREGATE_REPORT(GENERATE_VALIDATION_REPORT.out.confusion.collect())
