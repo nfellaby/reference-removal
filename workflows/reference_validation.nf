@@ -88,7 +88,7 @@ workflow REFERENCE_VALIDATION{
     }
 
     // Run Reference Removal on Spiked samples
-
+    FILTER_READS(spiked_long_ch, spiked_short_ch, REFERENCE_PARSING.out.ref_idx)
     // Summarise Results
 
 }
