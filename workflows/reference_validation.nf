@@ -1,6 +1,7 @@
 #!/usr/bin/env nextflow
 include { REFERENCE_PARSING     } from '../subworkflow/reference_parsing'
-include { SAMPLES_SETUP } from '../subworkflow/samples_parsing'
+include { SAMPLES_SETUP         } from '../subworkflow/samples_parsing'
+include { FILTER_READS          } from '../subworkflow/filter_reads'
 
 def checkBackgroundPresent(ch, String label, boolean required) {
     ch.count().subscribe { n ->
@@ -56,7 +57,7 @@ workflow REFERENCE_VALIDATION{
     fasta
     idx
     background_samplesheet_fp
-    sample_data_dir
+    background_data_dir
     read_length
 
     main:
@@ -69,7 +70,6 @@ workflow REFERENCE_VALIDATION{
     // Set up background data
     SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_length)
 
-
     // Spike in syntheised reference reads into test sample(s)
     if (read_length in short_reads) {
         // 'short' alone → missing paired background makes the whole run pointless → always required
@@ -77,16 +77,19 @@ workflow REFERENCE_VALIDATION{
         def required = (read_length == 'short') || (read_length == 'both' && strict_both)
         def paired_ch = checkBackgroundPresent(SAMPLES_SETUP.out.paired_end, 'paired-end (short-read)', required)
         SPIKE_SHORT_READS(paired_ch, REFERENCE_PARSING.out.ref_short_synth.first())
+        spiked_short_ch = SPIKE_SHORT_READS.out.spiked
     }
 
     if (read_length in long_reads) {
         def required = (read_length == 'long') || (read_length == 'both' && strict_both)
         def single_ch = checkBackgroundPresent(SAMPLES_SETUP.out.single_end, 'single-end (long-read)', required)
         SPIKE_LONG_READS(single_ch, REFERENCE_PARSING.out.ref_long_synth.first())
+        spiked_long_ch = SPIKE_LONG_READS.out.spiked
     }
 
     // Run Reference Removal on Spiked samples
     FILTER_READS(spiked_long_ch, spiked_short_ch, REFERENCE_PARSING.out.ref_idx)
     // Summarise Results
+    
 
 }
