@@ -20,8 +20,14 @@ workflow VALIDATION_REPORT {
         }
 
     GENERATE_VALIDATION_REPORT(joined)
+
+    def grouped = GENERATE_VALIDATION_REPORT.out.confusion
+        .collect()
+        .map { jsons -> tuple(read_type, jsons) }
+    
     AGGREGATE_REPORT(GENERATE_VALIDATION_REPORT.out.confusion.collect())
 
     emit:
-    report = AGGREGATE_REPORT.out.report
+    report     = AGGREGATE_REPORT.out.report
+    report_pdf = AGGREGATE_REPORT.out.report_pdf
 }
