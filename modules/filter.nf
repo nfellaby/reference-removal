@@ -14,7 +14,7 @@ process LONG_REFERENCE_REMOVAL {
     */
 
     container 'community.wave.seqera.io/library/deacon:0.17.0--43cd5289edd1686c'
-    lable 'process_medium'
+    label 'process_medium'
     maxForks 10
 
     input:
@@ -22,8 +22,7 @@ process LONG_REFERENCE_REMOVAL {
     path(ref_idx)
 
     output:
-    path("${sample_id}.ref_removed.json"), emit: ref_removed_reads
-    path("${sample_id}.ref_removed.fq.gz"), emit: ref_removed_summary
+    tuple val (sample_id), path("${sample_id}.ref_reads_only.fq.gz"), path("${sample_id}.ref_reads_only.json"), emit: ref_removal
 
     script:
     """
@@ -53,7 +52,7 @@ process LONG_SAMPLE_REMOVAL {
     */
 
     container 'community.wave.seqera.io/library/deacon:0.17.0--43cd5289edd1686c'
-    lable 'process_medium'
+    label 'process_medium'
     maxForks 10
 
     input:
@@ -61,8 +60,7 @@ process LONG_SAMPLE_REMOVAL {
     path(ref_idx)
 
     output:
-    path("${sample_id}.ref_removed.json"), emit: ref_reads_only
-    path("${sample_id}.ref_removed.fq.gz"), emit: ref_reads_only_summary
+    tuple val (sample_id), path("${sample_id}.ref_reads_only.fq.gz"), path("${sample_id}.ref_reads_only.json"), emit: sample_removal
 
     script:
     """
@@ -93,14 +91,16 @@ process PAIRED_REFERENCE_REMOVAL {
     */
 
     container 'community.wave.seqera.io/library/deacon:0.17.0--43cd5289edd1686c'
-    lable 'process_medium'
+    label 'process_medium'
     maxForks 10
 
     input:
-    val(sample_id)
-    path(fastq_r1_fp)
-    path(fastq_r2_fp)
+    tuple val(sample_id), path(fastq_r1_fp), path(fastq_r2_fp)
     path(ref_idx)
+
+    output:
+    tuple val(sample_id), path("${sample_id}.ref_removed.json"), path("${sample_id}.ref_removed.R1.fq.gz"), path("${sample_id}.ref_removed.R2.fq.gz"), emit: ref_removed
+
 
     script:
     """
@@ -131,15 +131,15 @@ process PAIRED_SAMPLE_REMOVAL {
     */
 
     container 'community.wave.seqera.io/library/deacon:0.17.0--43cd5289edd1686c'
-    lable 'process_medium'
+    label 'process_medium'
     maxForks 10
 
     input:
-    val(sample_id)
-    path(fastq_r1_fp)
-    path(fastq_r2_fp)
+    tuple val(sample_id), path(fastq_r1_fp), path(fastq_r2_fp)
     path(ref_idx)
 
+    output:
+    tuple val(sample_id), path("${sample_id}.ref_removed.json"), path("${sample_id}.ref_removed.R1.fq.gz"), path("${sample_id}.ref_removed.R2.fq.gz"), emit: sample_removal
 
     script:
     """
