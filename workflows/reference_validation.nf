@@ -51,14 +51,12 @@ process SPIKE_SHORT_READS {
     """
 }
 
-
-
 workflow REFERENCE_VALIDATION{
     take:
     fasta
     idx
     background_samplesheet_fp
-    background_data_dir
+    sample_data_dir
     read_length
 
     main:
