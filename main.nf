@@ -26,8 +26,8 @@ workflow {
         }
 
         def valid_read_type = ['paired', 'single', 'both']
-        if (!(params.read_length in valid_read_length)){
-            exit 1, "ERROR: --read_length must be one of ${valid_read_length.join(', ')} (got '${params.read_type}')"
+        if (!(params.read_type in valid_read_type)){
+            exit 1, "ERROR: --read_type must be one of ${valid_read_type.join(', ')} (got '${params.read_type}')"
         }
         log.info "Generating ${params.read_type} read synthetic data. Designated by --read_type, default='single', options='paired','single','both'"
 
@@ -36,7 +36,7 @@ workflow {
             (params.samplesheet && params.sample_data_dir)) {
             exit(1, "Validation requires exactly one of --samplesheet or --sample_data_dir")
         }
-        REFERENCE_VALIDATION(params.fasta, params.idx, params.samplesheet, params.sample_data_dir, params.read_length)
+        REFERENCE_VALIDATION(params.fasta, params.idx, params.samplesheet, params.sample_data_dir, params.read_type)
 
     }
     else {

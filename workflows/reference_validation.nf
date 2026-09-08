@@ -9,7 +9,7 @@ def checkBackgroundPresent(ch, String label, boolean required) {
         if (n == 0) {
             def msg = "No ${label} background samples found to spike the synthetic reference into."
             if (required) {
-                error "${msg} Cannot proceed with read_length='${params.read_length}'. Supply matching background data, or change read_length."
+                error "${msg} Cannot proceed with read_type='${params.read_type}'. Supply matching background data, or change read_type."
             } else {
                 log.warn "${msg} Skipping ${label} validation; continuing with what is available."
             }
@@ -72,7 +72,7 @@ workflow REFERENCE_VALIDATION{
     SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_type)
 
     // Spike in syntheised reference reads into test sample(s)
-    if (read_tpye in paired_reads) {
+    if (read_type in paired_reads) {
         // 'paired' alone → missing paired background makes the whole run pointless → always required
         // 'both'        → required unless the user opted into partial validation
         def required = (read_type == 'paired') || (read_type == 'single' && strict_both)
@@ -81,7 +81,7 @@ workflow REFERENCE_VALIDATION{
         spiked_paired_ch = SPIKE_PAIRED_READS.out.spiked
     }
 
-    if (read_length in single_reads) {
+    if (read_type in single_reads) {
         def required = (read_type == 'single') || (read_type == 'both' && strict_both)
         def single_ch = checkBackgroundPresent(SAMPLES_SETUP.out.single_end, 'single-end (long-read)', required)
         SPIKE_SINGLE_READS(single_ch, REFERENCE_PARSING.out.ref_single_synth.first())
@@ -94,7 +94,7 @@ workflow REFERENCE_VALIDATION{
     // --- Reporting: one VALIDATION_REPORT call per read type, since the ---
     // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
     // --- differ between long (single fastq) and paired (R1+R2 pair)        ---
-    if (read_length in single_reads) {
+    if (read_type in single_reads) {
         VALIDATION_REPORT(
             SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
             REFERENCE_PARSING.out.ref_single_synth.first(),
@@ -104,7 +104,7 @@ workflow REFERENCE_VALIDATION{
         )
     }
 
-    if (read_length in paired_reads) {
+    if (read_type in paired_reads) {
         VALIDATION_REPORT(
             SAMPLES_SETUP.out.paired_end,
             REFERENCE_PARSING.out.ref_paired_synth.first(),
