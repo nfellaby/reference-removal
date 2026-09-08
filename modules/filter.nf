@@ -139,7 +139,7 @@ process PAIRED_SAMPLE_REMOVAL {
     path(ref_idx)
 
     output:
-    tuple val(sample_id), path("${sample_id}.ref_removed.json"), path("${sample_id}.ref_removed.R1.fq.gz"), path("${sample_id}.ref_removed.R2.fq.gz"), emit: sample_removal
+    tuple val(sample_id), path("${sample_id}.ref_removed.json"), path("${sample_id}.ref_reads_only.R1.fq.gz"), path("${sample_id}.ref_reads_only.R2.fq.gz"), emit: sample_removal
 
     script:
     """
