@@ -83,8 +83,8 @@ def confusion_matrix_figure(row):
     fig.update_layout(
         title=f"{row.sample_id} ({row.read_type})",
         height=320,
-        margin=dict(l=120, r=20, t=50, b=40),
-        yaxis=dict(autorange="reversed"),
+        margin={"l": 120, "r": 20, "t": 50, "b": 40},
+        yaxis={"autorange": "reversed"},
     )
     return fig
 
@@ -115,7 +115,7 @@ def metrics_bar_figure(df):
         yaxis_range=[0, 105],
         legend_title_text="",
         height=450,
-        margin=dict(t=60, b=80),
+        margin={"t": 60, "b": 80},
     )
     # Flag recall visually: it's the safety-critical metric for a depletion
     # tool (a low recall means reference material is escaping depletion).
@@ -204,7 +204,7 @@ def build_report(df, outpath):
     matrix_fig.update_layout(
         height=320 * nrows,
         title="Per-sample confusion matrices",
-        margin=dict(t=80),
+        margin={"t": 80},
     )
 
     caveats_df = caveats_table(df)
