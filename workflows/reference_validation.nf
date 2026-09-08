@@ -87,4 +87,8 @@ workflow REFERENCE_VALIDATION{
         SPIKE_LONG_READS(single_ch, REFERENCE_PARSING.out.ref_long_synth.first())
     }
 
+    // Run Reference Removal on Spiked samples
+
+    // Summarise Results
+
 }

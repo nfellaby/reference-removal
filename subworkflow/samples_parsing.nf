@@ -57,7 +57,7 @@ workflow SAMPLES_SETUP{
 
     } else if(background_data_dir){
         log.info "Specified test data directory ${background_data_dir}. Auto-discovering background FASTQ samples."
-        // Generate a channel for each of the FASTA files in the directory
+        // Generate a channel for each of the FASTQ files in the directory
         def grouped_ch = Channel
             .fromPath("${background_data_dir}/**/*.{fastq,fq,fastq.gz,fq.gz}")
             .map { fq ->
@@ -77,14 +77,8 @@ workflow SAMPLES_SETUP{
 
         single_end_ch.subscribe { id, fq  -> log.info "Background single-end sample: ${id} -> ${fq}" } 
         paired_end_ch.subscribe { id, fqs -> log.info "Background paired-end sample: ${id} -> ${fqs.join(', ')}" }
-        
-
-
     }
-
-
     emit:
     single_end          = single_end_ch
     paired_end           = paired_end_ch
-
 }
