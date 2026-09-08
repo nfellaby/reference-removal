@@ -86,7 +86,5 @@ workflow SAMPLES_SETUP{
     emit:
     single_end          = single_end_ch
     paired_end           = paired_end_ch
-    // reference_genomes    = reference_genomes_ch
-    // short_synth_reads     = short_synth_reads_ch
-    // long_synth_reads      = long_synth_reads_ch
+
 }
