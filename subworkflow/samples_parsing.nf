@@ -54,6 +54,7 @@ workflow SAMPLES_SETUP{
 
         single_end_ch.subscribe { sample_id, read1 -> log.info "Single-end sample: ${sample_id} -> ${read1}" }
         paired_end_ch.subscribe { sample_id, reads -> log.info "Paired-end sample: ${sample_id} -> ${reads.join(', ')}" }   
+
     } else if(background_data_dir){
         log.info "Specified test data directory ${background_data_dir}. Auto-discovering background FASTQ samples."
         // Generate a channel for each of the FASTA files in the directory
@@ -79,41 +80,7 @@ workflow SAMPLES_SETUP{
         
 
 
-    } else{
-        exit(1, "No samplesheet provided with --samplesheet or directory specified with --test_data. Please provide one.")
     }
-        //  test_accessions_ch = Channel
-        //     .fromPath(params.test_accessions)
-        //     .splitText()
-        //     .map { it.trim() }
-        //     .filter { it && !it.startsWith('#') }
-
-        // DOWNLOAD_GENOME(test_accessions_ch)
-
-
-
-        // // Flatten [taxon, [genome1, genome2, ...]] -> one emission per genome, tagged with an id
-        // def per_genome_ch = reference_genomes_ch
-        //     .flatMap { taxon, genome_paths ->
-        //         genome_paths.collect { g ->
-        //             def genome_id = g.getBaseName().replaceAll(/\.fna(\.gz)?$/, '')
-        //             tuple(genome_id, g)
-        //         }
-        //     }
-        
-        // if (params.read_length in ['short', 'both']) {
-        //     short_synth_reads_ch = SHORT_SYNTH_READS(per_genome_ch).reads
-        //     short_synth_reads_ch.subscribe { id, r1, r2 ->
-        //         log.info "Generated short synthetic reads for ${id}: ${r1}, ${r2}"
-        //     }
-        // }
-
-        // if (params.read_length in ['long', 'both']) {
-        //     long_synth_reads_ch = LONG_SYNTH_READS(per_genome_ch).reads
-        //     long_synth_reads_ch.subscribe { id, reads ->
-        //         log.info "Generated long synthetic reads for ${id}: ${reads}"
-        //     }
-        // }
 
 
     emit:
