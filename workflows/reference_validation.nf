@@ -1,7 +1,8 @@
 #!/usr/bin/env nextflow
-include { REFERENCE_PARSING     } from '../subworkflow/reference_parsing'
-include { SAMPLES_SETUP         } from '../subworkflow/samples_parsing'
-include { FILTER_READS          } from '../subworkflow/filter_reads'
+include { REFERENCE_PARSING } from '../subworkflow/reference_parsing'
+include { SAMPLES_SETUP     } from '../subworkflow/samples_parsing'
+include { FILTER_READS      } from '../subworkflow/filter_reads'
+include { VALIDATION_REPORT } from '../subworkflow/report'
 
 def checkBackgroundPresent(ch, String label, boolean required) {
     ch.count().subscribe { n ->
@@ -14,7 +15,7 @@ def checkBackgroundPresent(ch, String label, boolean required) {
             }
         }
     }
-    return ch  // unchanged — process still runs per-item as normal, or zero times if truly empty
+    return ch
 }
 
 process SPIKE_LONG_READS {
@@ -89,7 +90,29 @@ workflow REFERENCE_VALIDATION{
 
     // Run Reference Removal on Spiked samples
     FILTER_READS(spiked_long_ch, spiked_short_ch, REFERENCE_PARSING.out.ref_idx)
-    // Summarise Results
+   
+    // --- Reporting: one VALIDATION_REPORT call per read type, since the ---
+    // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
+    // --- differ between long (single fastq) and short (R1+R2 pair)        ---
+    if (read_length in long_reads) {
+        VALIDATION_REPORT(
+            SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
+            REFERENCE_PARSING.out.ref_long_synth.first(),
+            FILTER_READS.out.long_ref_only,
+            FILTER_READS.out.long_depleted,
+            'long',
+        )
+    }
+
+    if (read_length in short_reads) {
+        VALIDATION_REPORT(
+            SAMPLES_SETUP.out.paired_end,
+            REFERENCE_PARSING.out.ref_short_synth.first(),
+            FILTER_READS.out.short_ref_only,
+            FILTER_READS.out.short_depleted,
+            'short',
+        )
+    }
     
 
 }

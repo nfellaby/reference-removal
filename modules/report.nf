@@ -31,12 +31,16 @@ process AGGREGATE_REPORT {
     publishDir "${params.outdir}/report", mode: params.publish_dir_mode
 
     input:
-    path(confusion_jsons)
+    tuple val(read_type), path(confusion_jsons)
 
     output:
-    path("validation_report.html"), emit: report
-    path("validation_report.pdf"),  emit: report_pdf
+    tuple val(read_type), path("${read_type}.validation_report.html"), emit: report
+    tuple val(read_type), path("${read_type}.validation_report.pdf"),  emit: report_pdf
 
     script:
-    "build_report.py --jsons ${confusion_jsons} -o validation_report.html"
+    """
+    build_html_report.py \\
+        --jsons ${confusion_jsons} \\
+        -o ${read_type}.validation_report.html
+    """
 }
