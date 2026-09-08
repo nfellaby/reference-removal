@@ -25,11 +25,11 @@ workflow {
             log.info "Testing with included index: ${params.idx}"
         }
 
-        def valid_read_length = ['short', 'long', 'both']
+        def valid_read_type = ['paired', 'single', 'both']
         if (!(params.read_length in valid_read_length)){
-            exit 1, "ERROR: --read_length must be one of ${valid_read_length.join(', ')} (got '${params.read_length}')"
+            exit 1, "ERROR: --read_length must be one of ${valid_read_length.join(', ')} (got '${params.read_type}')"
         }
-        log.info "Generating ${params.read_length} read synthetic data. Designated by --read_length, default='long', options='short','long','both'"
+        log.info "Generating ${params.read_type} read synthetic data. Designated by --read_type, default='single', options='paired','single','both'"
 
         // Validation requires either samplesheet or test-directory
         if ((!params.samplesheet && !params.sample_data_dir) ||

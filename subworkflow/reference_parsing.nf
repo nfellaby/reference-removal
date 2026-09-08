@@ -1,14 +1,14 @@
 #!/usr/bin/env nextflow
 
 include { GENERATE_IDX     } from '../modules/generate_idx'
-include { LONG_SYNTH_READS } from '../modules/synthesise_reads'
-include { SHORT_SYNTH_READS } from '../modules/synthesise_reads'
+include { SINGLE_SYNTH_READS } from '../modules/synthesise_reads'
+include { PAIRED_SYNTH_READS } from '../modules/synthesise_reads'
 
 
 workflow REFERENCE_PARSING{
     take:
     fasta_fp
-    read_length
+    read_type
 
     main:
     // Check if reference is index file or fasta
@@ -26,26 +26,26 @@ workflow REFERENCE_PARSING{
         }
     } 
 
-    def long_reads = ['long', 'both']
-    def short_reads = ['short', 'both']
+    def single_reads = ['single', 'both']
+    def paired_reads = ['paired', 'both']
     // Generate synthetic reads for index
-    ref_long_synth = null
-    ref_short_synth = null
+    ref_single_synth = null
+    ref_paired_synth = null
 
-    if (read_length  in  long_reads){
-        LONG_SYNTH_READS(fasta_fp, ref_id)
-        ref_long_synth = LONG_SYNTH_READS.out.ref_long_synth
+    if (read_type  in  single_reads){
+        SINGLE_SYNTH_READS(fasta_fp, ref_id)
+        ref_single_synth = SINGLE_SYNTH_READS.out.ref_single_synth
 
-        ref_long_synth.subscribe { long_ref ->
-            log.info "Generated synthetic reference long reads: ${long_ref}"
+        ref_single_synth.subscribe { single_ref ->
+            log.info "Generated synthetic reference single reads: ${single_ref}"
         }
     }
-    if (read_length  in  short_reads){
-        SHORT_SYNTH_READS(fasta_fp, ref_id)
-        ref_short_synth = SHORT_SYNTH_READS.out.ref_short_synth
+    if (read_type  in  paired_reads){
+        PAIRED_SYNTH_READS(fasta_fp, ref_id)
+        ref_paired_synth = PAIRED_SYNTH_READS.out.ref_paired_synth
 
-        ref_short_synth.subscribe { short_ref ->
-            log.info "Generated synthetic reference short reads: ${short_ref.join(', ')}"
+        ref_paired_synth.subscribe { paired_ref ->
+            log.info "Generated synthetic reference paired reads: ${paired_ref.join(', ')}"
         }
     }
     
@@ -54,6 +54,6 @@ workflow REFERENCE_PARSING{
     emit:
     ref_id
     ref_idx
-    ref_long_synth
-    ref_short_synth
+    ref_single_synth
+    ref_paired_synth
 }

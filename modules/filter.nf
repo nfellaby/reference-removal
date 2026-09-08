@@ -1,4 +1,4 @@
-process LONG_REFERENCE_REMOVAL {
+process SINGLE_REFERENCE_REMOVAL {
         /*
         This process takes single FASTQ input file and a reference index file and removes references reads using Deacon
 
@@ -22,7 +22,8 @@ process LONG_REFERENCE_REMOVAL {
     path(ref_idx)
 
     output:
-    tuple val(sample_id), path("${sample_id}.sample_summary.json"), path("${sample_id}.sample_reads.fq.gz"), emit: long_depleted
+    tuple val(sample_id), path("${sample_id}.sample_summary.json"), path("${sample_id}.sample_reads.fq.gz"), emit: single
+    _depleted
 
     script:
     """
@@ -36,7 +37,7 @@ process LONG_REFERENCE_REMOVAL {
     """
 }
 
-process LONG_SAMPLE_REMOVAL {
+process SINGLE_SAMPLE_REMOVAL {
         /*
         This process takes single FASTQ input file and a reference index file and removes sample reads using Deacon
 
@@ -60,7 +61,7 @@ process LONG_SAMPLE_REMOVAL {
     path(ref_idx)
 
     output:
-    tuple val (sample_id), path("${sample_id}.reference_summary.json"), path("${sample_id}.reference_reads.fq.gz"), emit: long_ref_only
+    tuple val (sample_id), path("${sample_id}.reference_summary.json"), path("${sample_id}.reference_reads.fq.gz"), emit: singke_ref_only
 
     script:
     """
@@ -99,7 +100,7 @@ process PAIRED_REFERENCE_REMOVAL {
     path(ref_idx)
 
     output:
-    tuple val(sample_id), path("${sample_id}.sample_summary.json"), path("${sample_id}.sample_reads.R1.fq.gz"), path("${sample_id}.sample_reads.R2.fq.gz"), emit: short_depleted
+    tuple val(sample_id), path("${sample_id}.sample_summary.json"), path("${sample_id}.sample_reads.R1.fq.gz"), path("${sample_id}.sample_reads.R2.fq.gz"), emit: paired_depleted
 
 
     script:
@@ -139,7 +140,7 @@ process PAIRED_SAMPLE_REMOVAL {
     path(ref_idx)
 
     output:
-    tuple val(sample_id), path("${sample_id}.reference_summary.json"), path("${sample_id}.reference_reads.R1.fq.gz"), path("${sample_id}.reference_reads.R2.fq.gz"), emit: short_ref_only
+    tuple val(sample_id), path("${sample_id}.reference_summary.json"), path("${sample_id}.reference_reads.R1.fq.gz"), path("${sample_id}.reference_reads.R2.fq.gz"), emit: paired_ref_only
 
     script:
     """

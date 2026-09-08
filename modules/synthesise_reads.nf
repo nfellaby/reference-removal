@@ -1,8 +1,8 @@
 #!/usr/bin/env nextflow
 
-process LONG_SYNTH_READS {
+process SINGLE_SYNTH_READS {
     /*
-         This process takes a FASTA input file and generates Synthetic Long reads using
+        This process takes a FASTA input file and generates Synthetic single reads using
         PBSim
 
         Inputs:
@@ -21,7 +21,7 @@ process LONG_SYNTH_READS {
     val(sample_id)
 
     output:
-    path("${sample_id}.pbsim.fq.gz"), emit: ref_long_synth
+    path("${sample_id}.pbsim.fq.gz"), emit: ref_single_synth
 
     script:
     """
@@ -42,9 +42,9 @@ process LONG_SYNTH_READS {
 }
 
 
-process SHORT_SYNTH_READS {
+process PAIRED_SYNTH_READS {
     /*
-        This process takes a FASTA input file and generates synthetic short reads using
+        This process takes a FASTA input file and generates synthetic paired reads using
         DWGSIM
 
         Inputs:
@@ -63,7 +63,7 @@ process SHORT_SYNTH_READS {
     val(sample_id)
 
     output:
-    tuple path("${sample_id}.bwa.R1.fastq.gz"), path("${sample_id}.bwa.R2.fastq.gz"), emit: ref_short_synth
+    tuple path("${sample_id}.bwa.R1.fastq.gz"), path("${sample_id}.bwa.R2.fastq.gz"), emit: ref_paired_synth
 
     script:
     """

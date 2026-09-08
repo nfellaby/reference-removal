@@ -6,9 +6,9 @@ workflow VALIDATION_REPORT {
     take:
     background_truth    // tuple(sample_id, fastq) or tuple(sample_id, r1, r2) -- pre-spike, from SAMPLES_SETUP
     reference_truth     // single fastq -- from REFERENCE_PARSING (broadcast with .first())
-    isolate_out         // tuple(sample_id, json, fastq) -- from LONG_SAMPLE_REMOVAL / PAIRED_SAMPLE_REMOVAL
-    depleted_out        // tuple(sample_id, json, fastq) -- from LONG_REFERENCE_REMOVAL / PAIRED_REFERENCE_REMOVAL
-    read_type           // val, 'long' or 'short'
+    isolate_out         // tuple(sample_id, json, fastq) -- from SINGLE_SAMPLE_REMOVAL / PAIRED_SAMPLE_REMOVAL
+    depleted_out        // tuple(sample_id, json, fastq) -- from SINGLE_REFERENCE_REMOVAL / PAIRED_REFERENCE_REMOVAL
+    read_type           // val, 'single' or 'paired'
 
     main:
     def joined = background_truth

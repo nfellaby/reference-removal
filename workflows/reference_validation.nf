@@ -18,7 +18,7 @@ def checkBackgroundPresent(ch, String label, boolean required) {
     return ch
 }
 
-process SPIKE_LONG_READS {
+process SPIKE_SINGLE_READS {
     label 'process_low'
     tag "${sample_id}"
 
@@ -27,15 +27,15 @@ process SPIKE_LONG_READS {
     path(ref_synth_fq)
 
     output:
-    tuple val(sample_id), path("${sample_id}.spiked.long.fq.gz"), emit: spiked
+    tuple val(sample_id), path("${sample_id}.spiked.single.fq.gz"), emit: spiked
 
     script:
     """
-    cat ${background_fq} ${ref_synth_fq} > ${sample_id}.spiked.long.fq.gz
+    cat ${background_fq} ${ref_synth_fq} > ${sample_id}.spiked.single.fq.gz
     """
 }
 
-process SPIKE_SHORT_READS {
+process SPIKE_PAIRED_READS {
     label 'process_low'
     tag "${sample_id}"
 
@@ -59,58 +59,58 @@ workflow REFERENCE_VALIDATION{
     idx
     background_samplesheet_fp
     background_data_dir
-    read_length
+    read_type
 
     main:
-    def long_reads  = ['long', 'both']
-    def short_reads = ['short', 'both']
+    def single_reads  = ['single', 'both']
+    def paired_reads = ['paired', 'both']
     def strict_both = !(params.allow_partial_validation ?: false)
 
     // Generate index files for reference
-    REFERENCE_PARSING(fasta, read_length)
+    REFERENCE_PARSING(fasta, read_type)
     // Set up background data
-    SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_length)
+    SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_type)
 
     // Spike in syntheised reference reads into test sample(s)
-    if (read_length in short_reads) {
-        // 'short' alone → missing paired background makes the whole run pointless → always required
+    if (read_tpye in paired_reads) {
+        // 'paired' alone → missing paired background makes the whole run pointless → always required
         // 'both'        → required unless the user opted into partial validation
-        def required = (read_length == 'short') || (read_length == 'both' && strict_both)
+        def required = (read_type == 'paired') || (read_type == 'single' && strict_both)
         def paired_ch = checkBackgroundPresent(SAMPLES_SETUP.out.paired_end, 'paired-end (short-read)', required)
-        SPIKE_SHORT_READS(paired_ch, REFERENCE_PARSING.out.ref_short_synth.first())
-        spiked_short_ch = SPIKE_SHORT_READS.out.spiked
+        SPIKE_PAIRED_READS(paired_ch, REFERENCE_PARSING.out.ref_paired_synth.first())
+        spiked_paired_ch = SPIKE_PAIRED_READS.out.spiked
     }
 
-    if (read_length in long_reads) {
-        def required = (read_length == 'long') || (read_length == 'both' && strict_both)
+    if (read_length in single_reads) {
+        def required = (read_type == 'single') || (read_type == 'both' && strict_both)
         def single_ch = checkBackgroundPresent(SAMPLES_SETUP.out.single_end, 'single-end (long-read)', required)
-        SPIKE_LONG_READS(single_ch, REFERENCE_PARSING.out.ref_long_synth.first())
-        spiked_long_ch = SPIKE_LONG_READS.out.spiked
+        SPIKE_SINGLE_READS(single_ch, REFERENCE_PARSING.out.ref_single_synth.first())
+        spiked_single_ch = SPIKE_SINGLE_READS.out.spiked
     }
 
     // Run Reference Removal on Spiked samples
-    FILTER_READS(spiked_long_ch, spiked_short_ch, REFERENCE_PARSING.out.ref_idx)
+    FILTER_READS(spiked_single_ch, spiked_paired_ch, REFERENCE_PARSING.out.ref_idx)
    
     // --- Reporting: one VALIDATION_REPORT call per read type, since the ---
     // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
-    // --- differ between long (single fastq) and short (R1+R2 pair)        ---
-    if (read_length in long_reads) {
+    // --- differ between long (single fastq) and paired (R1+R2 pair)        ---
+    if (read_length in single_reads) {
         VALIDATION_REPORT(
             SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
-            REFERENCE_PARSING.out.ref_long_synth.first(),
-            FILTER_READS.out.long_ref_only,
-            FILTER_READS.out.long_depleted,
-            'long',
+            REFERENCE_PARSING.out.ref_single_synth.first(),
+            FILTER_READS.out.single_ref_only,
+            FILTER_READS.out.single_depleted,
+            'single',
         )
     }
 
-    if (read_length in short_reads) {
+    if (read_length in paired_reads) {
         VALIDATION_REPORT(
             SAMPLES_SETUP.out.paired_end,
-            REFERENCE_PARSING.out.ref_short_synth.first(),
-            FILTER_READS.out.short_ref_only,
-            FILTER_READS.out.short_depleted,
-            'short',
+            REFERENCE_PARSING.out.ref_paired_synth.first(),
+            FILTER_READS.out.paired_ref_only,
+            FILTER_READS.out.paired_depleted,
+            'paired',
         )
     }
     
