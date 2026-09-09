@@ -11,7 +11,7 @@ process GENERATE_IDX {
             - IDX file
 
     */
-
+    tag "${ref_id}"
     container 'quay.io/biocontainers/deacon:0.16.0--h3edb6b3_0'
     label 'process_low'
 
