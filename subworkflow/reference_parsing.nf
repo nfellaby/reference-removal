@@ -8,7 +8,7 @@ include { PAIRED_SYNTH_READS } from '../modules/synthesise_reads'
 workflow REFERENCE_PARSING{
     take:
     fasta_fp   // always required for validation -- needed to synthesise reference reads
-    idx_fp     // always required for validation -- used directly, skips re-indexing
+    idx_fp     // optional for validation -- used directly, skips re-indexing
     read_type
 
     main:
