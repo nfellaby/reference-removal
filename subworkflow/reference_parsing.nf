@@ -53,8 +53,6 @@ workflow REFERENCE_PARSING{
         }
     }
     
-    
-
     emit:
     ref_id
     ref_idx
