@@ -1,9 +1,7 @@
 #!/usr/bin/env nextflow
 
-include { GENERATE_IDX     } from '../modules/generate_idx'
-include { SINGLE_SYNTH_READS } from '../modules/synthesise_reads'
-include { PAIRED_SYNTH_READS } from '../modules/synthesise_reads'
-
+include { GENERATE_IDX                           } from '../modules/generate_idx'
+include { SINGLE_SYNTH_READS; PAIRED_SYNTH_READS } from '../modules/synthesise_reads'
 
 workflow REFERENCE_PARSING{
     take:

@@ -2,7 +2,7 @@
 #!/usr/bin/env nextflow
 
 include { SINGLE_REFERENCE_REMOVAL; SINGLE_SAMPLE_REMOVAL     } from '../modules/filter'
-include { PAIRED_REFERENCE_REMOVAL; PAIRED_SAMPLE_REMOVAL } from '../modules/filter'
+include { PAIRED_REFERENCE_REMOVAL; PAIRED_SAMPLE_REMOVAL     } from '../modules/filter'
 
 workflow FILTER_READS {
     take:
