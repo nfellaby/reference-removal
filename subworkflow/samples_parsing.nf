@@ -56,7 +56,7 @@ workflow SAMPLES_SETUP{
         log.info "Specified test data directory ${background_data_dir}. Auto-discovering background FASTQ samples."
         // Generate a channel for each of the FASTQ files in the directory
         def grouped_ch = Channel
-            .fromPath("${background_data_dir}/**/*.{fastq,fq,fastq.gz,fq.gz}")
+            .fromPath("${background_data_dir}/**.{fastq,fq,fastq.gz,fq.gz}")
             .map { fq ->
                 // Strip common mate-pair suffixes to get a sample-level grouping key
                 def sample_id = fq.getName().replaceAll(/(_R?[12])?\.(fastq|fq)(\.gz)?$/, '')
