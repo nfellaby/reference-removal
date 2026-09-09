@@ -1,7 +1,4 @@
 #!/usr/bin/env nextflow
-include { LONG_SYNTH_READS; SHORT_SYNTH_READS } from '../modules/synthesise_reads'
-include { POOL_LONG_READS; POOL_SHORT_READS }   from '../modules/pool_reads'
-
 workflow SAMPLES_SETUP{
     take:
     samplesheet_fp
