@@ -72,8 +72,8 @@ workflow REFERENCE_VALIDATION{
     SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_type)
 
     
-    def spiked_long_ch  = Channel.empty()
-    def spiked_short_ch = Channel.empty()
+    def spiked_single_ch  = Channel.empty()
+    def spiked_paired_ch = Channel.empty()
 
     // Spike in syntheised reference reads into test sample(s)
     if (read_type in paired_reads) {

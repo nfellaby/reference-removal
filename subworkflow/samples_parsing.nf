@@ -77,5 +77,5 @@ workflow SAMPLES_SETUP{
     }
     emit:
     single_end          = single_end_ch
-    paired_end           = paired_end_ch
+    paired_end          = paired_end_ch
 }
