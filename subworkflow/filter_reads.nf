@@ -1,4 +1,3 @@
-// subworkflow/filter_reads.nf
 #!/usr/bin/env nextflow
 
 include { SINGLE_REFERENCE_REMOVAL; SINGLE_SAMPLE_REMOVAL     } from '../modules/filter'
