@@ -26,7 +26,7 @@ process GENERATE_VALIDATION_REPORT {
 }
 
 process AGGREGATE_REPORT {
-    container 'community.wave.seqera.io/library/pyfastx_pandas_pip_plotly:ce47640d3d5148f3'
+    container 'community.wave.seqera.io/library/pip_matplotlib_pandas_plotly_reportlab:f92e133c1334159f'
     label 'process_low'
     publishDir "${params.outdir}/report", mode: params.publish_dir_mode
 
