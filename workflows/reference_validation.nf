@@ -66,8 +66,8 @@ workflow REFERENCE_VALIDATION{
     def paired_reads = ['paired', 'both']
     def strict_both = !(params.allow_partial_validation ?: false)
 
-    // Generate index files for reference
-    REFERENCE_PARSING(fasta, read_type)
+    // Either use existing index file or generate new one from fasta
+    REFERENCE_PARSING(fasta, idx, read_type)
     // Set up background data
     SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_type)
 
