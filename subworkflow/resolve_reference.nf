@@ -3,8 +3,8 @@ include { GENERATE_IDX } from '../modules/generate_idx'
 
 workflow RESOLVE_REFERENCE {
     take:
-    fasta_fp   // FASTA path, or null if idx_fp is supplied instead
-    idx_fp     // prebuilt Deacon index path, or null if fasta_fp is supplied instead
+    fasta_fp   // always required for validation
+    idx_fp     // optional -- used preferentially if supplied, skips re-indexing
 
     main:
     def supplied_idx = idx_fp ?: (fasta_fp?.toString()?.endsWith('.idx') ? fasta_fp : null)
