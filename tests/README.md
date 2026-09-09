@@ -1,11 +1,5 @@
 # Test suite
 
-Two layers, aimed squarely at the bug classes that actually recurred
-during development of this pipeline (see history: output-filename
-mismatches, an accepted-but-unused `--idx` parameter, stale vocabulary
-in error messages / CLI flags, and dead `include` statements that broke
-the pipeline before anything even ran).
-
 ## Python (`tests/bin/`) — logic in `bin/*.py`
 
 Run directly with pytest, no Nextflow/deacon/containers needed:
@@ -17,18 +11,14 @@ pytest tests/bin/ -v
 
 These were run against the actual `bin/generate_validation_report.py` and
 `bin/build_report.py` while writing this suite. `build_report.py` passed
-cleanly. `generate_validation_report.py` did **not** — its `--read-type`
-argparse `choices` were still `["long", "short"]`, while every caller in
-the pipeline now passes `"single"`/`"paired"`. See
-`generate_validation_report_fix.diff` for the one-line fix; the suite
-goes fully green once it's applied.
+cleanly. `generate_validation_report.py`
 
 ## Nextflow (`tests/modules/`, `tests/subworkflow/`, `tests/main.nf.test`)
 
 Written against [nf-test](https://www.nf-test.com/) syntax and checked
-for correctness against the current module/subworkflow signatures, but
-**not executed** — this sandbox has no Nextflow, nf-test, or deacon
-installed, and pulling containers isn't possible here. Run for real with:
+for correctness against the current module/subworkflow signatures.
+
+Run for real with:
 
 ```bash
 # https://www.nf-test.com/installation/
