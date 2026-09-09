@@ -17,7 +17,7 @@ workflow REFERENCE_PARSING{
     ref_id = file(fasta_fp).baseName
     log.info "Reference ID: ${ref_id}"
 
-   // idx_fp is optional -- use it directly if supplied, to skip re-indexing
+    // idx_fp is optional -- use it directly if supplied, to skip re-indexing
     if (idx_fp) {
         log.info "Using supplied Deacon index directly: ${idx_fp}"
         ref_idx = Channel.fromPath(idx_fp)
