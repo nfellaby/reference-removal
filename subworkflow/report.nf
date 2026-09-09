@@ -11,21 +11,25 @@ workflow VALIDATION_REPORT {
     read_type           // val, 'single' or 'paired'
 
     main:
-    def joined = background_truth
-        .join(isolate_out)
-        .join(depleted_out)
-        .combine(reference_truth)
-        .map { sample_id, bg, iso_json, iso_fq, dep_json, dep_fq, ref_fastq ->
-            tuple(sample_id, read_type, ref_fastq, bg, iso_fq, dep_fq, iso_json)
+
+    def bg_norm  = background_truth.map { row -> tuple(row[0], row[1..-1]..flatten()) }
+    def iso_norm = isolate_out.map      { row -> tuple(row[0], row[1], row[2..-1]) }
+    def dep_nrom = depleted_out.map     { row -> tuple(row[0], row[1], row[2..-1]) }
+    def ref_norm = reference_truth.map  { it instanceof List ? it : [it] }
+
+    def joined = bg_norm
+        .join(iso_norm)
+        .join(dep_norm)
+        .combine(ref_norm)
+        .map { sample_id, bg_fqs, iso_json, iso_fqs, dep_json, dep_fqs, ref_fqs ->
+            tuple(sample_id, read_type, ref_fqs, bg_fqs, iso_fqs, dep_fqs, iso_json)
         }
 
     GENERATE_VALIDATION_REPORT(joined)
 
-    def grouped = GENERATE_VALIDATION_REPORT.out.confusion
-        .collect()
-        .map { jsons -> tuple(read_type, jsons) }
+    def grouped = GENERATE_VALIDATION_REPORT.out.confusion.collect().map { jsons -> tuple(read_type, jsons) }
     
-    AGGREGATE_REPORT(GENERATE_VALIDATION_REPORT.out.confusion.collect())
+    AGGREGATE_REPORT(grouped)
 
     emit:
     report     = AGGREGATE_REPORT.out.report

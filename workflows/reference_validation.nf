@@ -71,11 +71,15 @@ workflow REFERENCE_VALIDATION{
     // Set up background data
     SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_type)
 
+    
+    def spiked_long_ch  = Channel.empty()
+    def spiked_short_ch = Channel.empty()
+
     // Spike in syntheised reference reads into test sample(s)
     if (read_type in paired_reads) {
         // 'paired' alone → missing paired background makes the whole run pointless → always required
         // 'both'        → required unless the user opted into partial validation
-        def required = (read_type == 'paired') || (read_type == 'single' && strict_both)
+        def required = (read_type == 'paired') || (read_type == 'both' && strict_both)
         def paired_ch = checkBackgroundPresent(SAMPLES_SETUP.out.paired_end, 'paired-end (short-read)', required)
         SPIKE_PAIRED_READS(paired_ch, REFERENCE_PARSING.out.ref_paired_synth.first())
         spiked_paired_ch = SPIKE_PAIRED_READS.out.spiked

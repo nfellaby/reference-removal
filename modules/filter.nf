@@ -22,8 +22,7 @@ process SINGLE_REFERENCE_REMOVAL {
     path(ref_idx)
 
     output:
-    tuple val(sample_id), path("${sample_id}.sample_summary.json"), path("${sample_id}.sample_reads.fq.gz"), emit: single
-    _depleted
+    tuple val(sample_id), path("${sample_id}.sample_summary.json"), path("${sample_id}.sample_reads.fq.gz"), emit: single_depleted
 
     script:
     """
@@ -61,7 +60,7 @@ process SINGLE_SAMPLE_REMOVAL {
     path(ref_idx)
 
     output:
-    tuple val (sample_id), path("${sample_id}.reference_summary.json"), path("${sample_id}.reference_reads.fq.gz"), emit: singke_ref_only
+    tuple val (sample_id), path("${sample_id}.reference_summary.json"), path("${sample_id}.reference_reads.fq.gz"), emit: single_ref_only
 
     script:
     """

@@ -39,7 +39,7 @@ process AGGREGATE_REPORT {
 
     script:
     """
-    build_html_report.py \\
+    build_report.py \\
         --jsons ${confusion_jsons} \\
         -o ${read_type}.validation_report.html
     """
