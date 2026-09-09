@@ -26,7 +26,7 @@ def get_ids(fastq_paths):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--sample-id", required=True)
-    p.add_argument("--read-type", required=True, choices=["long", "short"])
+    p.add_argument("--read-type", required=True, choices=["single", "paired"])
     p.add_argument(
         "--reference-fastq",
         required=True,
