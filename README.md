@@ -26,4 +26,4 @@ An additional component can be used which will test how effectively a reference 
 - [x] Remove reference from background FASTQ
 - [x] Generate summary statistics
 - [x] Generate summary report
-- [ ] Complete process for only removing reference i.e. not validation
+- [x] Complete process for only removing reference i.e. not validation
