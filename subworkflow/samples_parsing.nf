@@ -58,7 +58,7 @@ workflow SAMPLES_SETUP{
         log.info "Specified test data directory ${background_data_dir}. Auto-discovering background FASTQ samples."
 
         def grouped_ch = Channel
-            .fromPath("${clean_data_dir}/**.{fastq,fq,fastq.gz,fq.gz}")
+            .fromPath("${background_data_dir}/**.{fastq,fq,fastq.gz,fq.gz}")
             .view { "DEBUG glob match: ${it}" }
             .map { fq ->
                 // Strip common mate-pair suffixes to get a sample-level grouping key
