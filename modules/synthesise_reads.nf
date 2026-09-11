@@ -65,7 +65,7 @@ process PAIRED_SYNTH_READS {
 
     script:
     """
-        dwgsim \
+    dwgsim \
         -C 10 \
         -1 150 \
         -2 150 \
