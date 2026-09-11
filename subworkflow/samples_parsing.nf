@@ -75,10 +75,10 @@ workflow SAMPLES_SETUP{
             single: fqs.size() == 1
         }
 
-        // single_end_ch = branched.single.map { sample_id, fqs -> tuple(sample_id, fqs[0]) }
+        single_end_ch = branched.single.map { sample_id, fqs -> tuple(sample_id, fqs[0]) }
         // paired_end_ch = branched.paired.map { sample_id, fqs -> tuple(sample_id, fqs.sort()) } // sort → R1 before R2
 
-        // single_end_ch.subscribe { id, fq  -> log.info "Background single-end sample: ${id} -> ${fq}" } 
+        single_end_ch.subscribe { id, fq  -> log.info "Background single-end sample: ${id} -> ${fq}" } 
         // paired_end_ch.subscribe { id, fqs -> log.info "Background paired-end sample: ${id} -> ${fqs.join(', ')}" }
     }
     // emit:
