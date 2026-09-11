@@ -70,10 +70,10 @@ workflow SAMPLES_SETUP{
         .groupTuple()
         .view { "DEBUG grouped: ${it[0]} -> ${it[1].size()} file(s)" }
 
-        // def branched = grouped_ch.branch { sample_id, fqs ->
-        //     paired: fqs.size() == 2
-        //     single: fqs.size() == 1
-        // }
+        def branched = grouped_ch.branch { sample_id, fqs ->
+            paired: fqs.size() == 2
+            single: fqs.size() == 1
+        }
 
         // single_end_ch = branched.single.map { sample_id, fqs -> tuple(sample_id, fqs[0]) }
         // paired_end_ch = branched.paired.map { sample_id, fqs -> tuple(sample_id, fqs.sort()) } // sort → R1 before R2
