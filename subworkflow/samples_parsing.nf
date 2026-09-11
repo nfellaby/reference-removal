@@ -55,8 +55,11 @@ workflow SAMPLES_SETUP{
     } else if(background_data_dir){
         log.info "Specified test data directory ${background_data_dir}. Auto-discovering background FASTQ samples."
         // Generate a channel for each of the FASTQ files in the directory
+        def clean_data_dir = background_data_dir.toString().replaceAll(/\/+$/, '')
+        log.info "Specified test data directory ${clean_data_dir}. Auto-discovering background FASTQ samples."
+
         def grouped_ch = Channel
-            .fromPath("${background_data_dir}/**.{fastq,fq,fastq.gz,fq.gz}")
+            .fromPath("${clean_data_dir}/**.{fastq,fq,fastq.gz,fq.gz}")
             .view { "DEBUG glob match: ${it}" }
             .map { fq ->
                 // Strip common mate-pair suffixes to get a sample-level grouping key
