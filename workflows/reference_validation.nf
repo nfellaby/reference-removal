@@ -74,51 +74,51 @@ workflow REFERENCE_VALIDATION{
     SAMPLES_SETUP(background_samplesheet_fp, background_data_dir, read_type)
 
     
-    def spiked_single_ch  = Channel.empty()
-    def spiked_paired_ch = Channel.empty()
+    // def spiked_single_ch  = Channel.empty()
+    // def spiked_paired_ch = Channel.empty()
 
-    // Spike in syntheised reference reads into test sample(s)
-    if (read_type in paired_reads) {
-        // 'paired' alone → missing paired background makes the whole run pointless → always required
-        // 'both'        → required unless the user opted into partial validation
-        def required = (read_type == 'paired') || (read_type == 'both' && strict_both)
-        def paired_ch = checkBackgroundPresent(SAMPLES_SETUP.out.paired_end, 'paired-end (short-read)', required)
-        SPIKE_PAIRED_READS(paired_ch, REFERENCE_PARSING.out.ref_paired_synth.first())
-        spiked_paired_ch = SPIKE_PAIRED_READS.out.spiked
-    }
+    // // Spike in syntheised reference reads into test sample(s)
+    // if (read_type in paired_reads) {
+    //     // 'paired' alone → missing paired background makes the whole run pointless → always required
+    //     // 'both'        → required unless the user opted into partial validation
+    //     def required = (read_type == 'paired') || (read_type == 'both' && strict_both)
+    //     def paired_ch = checkBackgroundPresent(SAMPLES_SETUP.out.paired_end, 'paired-end (short-read)', required)
+    //     SPIKE_PAIRED_READS(paired_ch, REFERENCE_PARSING.out.ref_paired_synth.first())
+    //     spiked_paired_ch = SPIKE_PAIRED_READS.out.spiked
+    // }
 
-    if (read_type in single_reads) {
-        def required = (read_type == 'single') || (read_type == 'both' && strict_both)
-        def single_ch = checkBackgroundPresent(SAMPLES_SETUP.out.single_end, 'single-end (long-read)', required)
-        SPIKE_SINGLE_READS(single_ch, REFERENCE_PARSING.out.ref_single_synth.first())
-        spiked_single_ch = SPIKE_SINGLE_READS.out.spiked
-    }
+    // if (read_type in single_reads) {
+    //     def required = (read_type == 'single') || (read_type == 'both' && strict_both)
+    //     def single_ch = checkBackgroundPresent(SAMPLES_SETUP.out.single_end, 'single-end (long-read)', required)
+    //     SPIKE_SINGLE_READS(single_ch, REFERENCE_PARSING.out.ref_single_synth.first())
+    //     spiked_single_ch = SPIKE_SINGLE_READS.out.spiked
+    // }
 
-    // Run Reference Removal on Spiked samples
-    FILTER_READS(spiked_single_ch, spiked_paired_ch, REFERENCE_PARSING.out.ref_idx)
+    // // Run Reference Removal on Spiked samples
+    // FILTER_READS(spiked_single_ch, spiked_paired_ch, REFERENCE_PARSING.out.ref_idx)
    
-    // --- Reporting: one VALIDATION_REPORT call per read type, since the ---
-    // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
-    // --- differ between long (single fastq) and paired (R1+R2 pair)        ---
-    if (read_type in single_reads) {
-        VALIDATION_REPORT(
-            SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
-            REFERENCE_PARSING.out.ref_single_synth.first(),
-            FILTER_READS.out.single_ref_only,
-            FILTER_READS.out.single_depleted,
-            'single',
-        )
-    }
+    // // --- Reporting: one VALIDATION_REPORT call per read type, since the ---
+    // // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
+    // // --- differ between long (single fastq) and paired (R1+R2 pair)        ---
+    // if (read_type in single_reads) {
+    //     VALIDATION_REPORT(
+    //         SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
+    //         REFERENCE_PARSING.out.ref_single_synth.first(),
+    //         FILTER_READS.out.single_ref_only,
+    //         FILTER_READS.out.single_depleted,
+    //         'single',
+    //     )
+    // }
 
-    if (read_type in paired_reads) {
-        VALIDATION_REPORT(
-            SAMPLES_SETUP.out.paired_end,
-            REFERENCE_PARSING.out.ref_paired_synth.first(),
-            FILTER_READS.out.paired_ref_only,
-            FILTER_READS.out.paired_depleted,
-            'paired',
-        )
-    }
+    // if (read_type in paired_reads) {
+    //     VALIDATION_REPORT(
+    //         SAMPLES_SETUP.out.paired_end,
+    //         REFERENCE_PARSING.out.ref_paired_synth.first(),
+    //         FILTER_READS.out.paired_ref_only,
+    //         FILTER_READS.out.paired_depleted,
+    //         'paired',
+    //     )
+    // }
     
 
 }
