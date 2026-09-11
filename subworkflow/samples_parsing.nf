@@ -59,7 +59,7 @@ workflow SAMPLES_SETUP{
             .fromPath("${background_data_dir}/**.{fastq,fq,fastq.gz,fq.gz}")
             .map { fq ->
                 // Strip common mate-pair suffixes to get a sample-level grouping key
-                def sample_id = fq.getName().replaceAll(/(_R?[12])?\.(fastq|fq)(\.gz)?$/, '')
+                def sample_id = fq.getName().replaceAll(/(?i)(?:[._-](?:read)?r?[12](?:_001)?)?\.(fastq|fq)(\.gz)?$/, '')
                 tuple(sample_id, fq)
             }
         .groupTuple()
