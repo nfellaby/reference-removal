@@ -87,12 +87,12 @@ workflow REFERENCE_VALIDATION{
         spiked_paired_ch = SPIKE_PAIRED_READS.out.spiked
     }
 
-    // if (read_type in single_reads) {
-    //     def required = (read_type == 'single') || (read_type == 'both' && strict_both)
-    //     def single_ch = checkBackgroundPresent(SAMPLES_SETUP.out.single_end, 'single-end (long-read)', required)
-    //     SPIKE_SINGLE_READS(single_ch, REFERENCE_PARSING.out.ref_single_synth.first())
-    //     spiked_single_ch = SPIKE_SINGLE_READS.out.spiked
-    // }
+    if (read_type in single_reads) {
+        def required = (read_type == 'single') || (read_type == 'both' && strict_both)
+        def single_ch = checkBackgroundPresent(SAMPLES_SETUP.out.single_end, 'single-end (long-read)', required)
+        SPIKE_SINGLE_READS(single_ch, REFERENCE_PARSING.out.ref_single_synth.first())
+        spiked_single_ch = SPIKE_SINGLE_READS.out.spiked
+    }
 
     // // Run Reference Removal on Spiked samples
     // FILTER_READS(spiked_single_ch, spiked_paired_ch, REFERENCE_PARSING.out.ref_idx)

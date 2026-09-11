@@ -59,15 +59,12 @@ workflow SAMPLES_SETUP{
 
         def grouped_ch = Channel
             .fromPath("${background_data_dir}/**.{fastq,fq,fastq.gz,fq.gz}")
-            .view { "DEBUG glob match: ${it}" }
             .map { fq ->
                 // Strip common mate-pair suffixes to get a sample-level grouping key
                 def sample_id = fq.getName().replaceAll(/(?i)(?:[._-](?:read)?r?[12](?:_001)?)?\.(fastq|fq)(\.gz)?$/, '')
                 tuple(sample_id, fq)
             }
-            .view { "DEBUG sample_id assigned: ${it[0]} <- ${it[1].getName()}" }
         .groupTuple()
-        .view { "DEBUG grouped: ${it[0]} -> ${it[1].size()} file(s)" }
 
         def branched = grouped_ch.branch { sample_id, fqs ->
             paired: fqs.size() == 2
