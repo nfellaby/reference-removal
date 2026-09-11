@@ -122,7 +122,7 @@ process PAIRED_REFERENCE_REMOVAL {
         ${fastq_r2_fp} \
         -s ${sample_id}.sample_summary.json \
         -o ${sample_id}.sample_reads.R1.fq.gz \
-        -o ${sample_id}.sample_reads.R2.fq.gz \
+        -O ${sample_id}.sample_reads.R2.fq.gz \
         -t ${task.cpus}
     """
 }
@@ -164,7 +164,7 @@ process PAIRED_SAMPLE_REMOVAL {
         ${fastq_r2_fp} \
         -s ${sample_id}.reference_summary.json \
         -o ${sample_id}.reference_reads.R1.fq.gz \
-        -o ${sample_id}.reference_reads.R2.fq.gz \
+        -O ${sample_id}.reference_reads.R2.fq.gz \
         -t ${task.cpus}
     """
 }
