@@ -61,7 +61,7 @@ process PAIRED_SYNTH_READS {
     val(sample_id)
 
     output:
-    tuple path("${sample_id}.bwa.R1.fastq.gz"), path("${sample_id}.bwa.R2.fastq.gz"), emit: ref_paired_synth
+    tuple path("${sample_id}.bwa.read1.fastq.gz"), path("${sample_id}.bwa.read2.fastq.gz"), emit: ref_paired_synth
 
     script:
     """
