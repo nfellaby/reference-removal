@@ -103,7 +103,7 @@ workflow REFERENCE_VALIDATION{
     // if (read_type in single_reads) {
     //     VALIDATION_REPORT(
     //         SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
-    //         REFERENCE_PARSING.out.ref_single_synth.first(),
+    //         REFERENCE_PARSING.out.ref_single_synth,
     //         FILTER_READS.out.single_ref_only,
     //         FILTER_READS.out.single_depleted,
     //         'single',
@@ -113,7 +113,7 @@ workflow REFERENCE_VALIDATION{
     // if (read_type in paired_reads) {
     //     VALIDATION_REPORT(
     //         SAMPLES_SETUP.out.paired_end,
-    //         REFERENCE_PARSING.out.ref_paired_synth.first(),
+    //         REFERENCE_PARSING.out.ref_paired_synth,
     //         FILTER_READS.out.paired_ref_only,
     //         FILTER_READS.out.paired_depleted,
     //         'paired',

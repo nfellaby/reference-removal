@@ -12,7 +12,7 @@ workflow FILTER_READS {
     main:
     // .first() — same fix as the AIBLAST queue-vs-value issue: broadcasts
     // the one reference index to every sample rather than being consumed once
-    def idx_ch = ref_idx.first()
+    def idx_ch = ref_idx
 
     SINGLE_REFERENCE_REMOVAL(spiked_single, idx_ch)
     SINGLE_SAMPLE_REMOVAL(spiked_single, idx_ch)
