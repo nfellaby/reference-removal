@@ -2,7 +2,7 @@
 include { REFERENCE_PARSING } from '../subworkflow/reference_parsing'
 include { SAMPLES_SETUP     } from '../subworkflow/samples_parsing'
 include { FILTER_READS      } from '../subworkflow/filter_reads'
-include { VALIDATION_REPORT } from '../subworkflow/report'
+include { VALIDATION_REPORT as VALIDATION_REPORT_SINGLE; VALIDATION_REPORT as VALIDATION_REPORT_PAIRED } from '../subworkflow/report'
 
 def checkBackgroundPresent(ch, String label, boolean required) {
     ch.count().subscribe { n ->
@@ -103,7 +103,7 @@ workflow REFERENCE_VALIDATION{
     // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
     // --- differ between long (single fastq) and paired (R1+R2 pair)        ---
     if (read_type in single_reads) {
-        VALIDATION_REPORT(
+        VALIDATION_REPORT_SINGLE(
             SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
             REFERENCE_PARSING.out.ref_single_synth,
             FILTER_READS.out.single_ref_only,
@@ -113,7 +113,7 @@ workflow REFERENCE_VALIDATION{
     }
 
     if (read_type in paired_reads) {
-        VALIDATION_REPORT(
+        VALIDATION_REPORT_PAIRED(
             SAMPLES_SETUP.out.paired_end,
             REFERENCE_PARSING.out.ref_paired_synth,
             FILTER_READS.out.paired_ref_only,
