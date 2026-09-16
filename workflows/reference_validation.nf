@@ -22,6 +22,7 @@ process SPIKE_SINGLE_READS {
     label 'process_low'
     tag "${sample_id}"
     container 'community.wave.seqera.io/library/pyfastx_pandas_pip_plotly:ce47640d3d5148f3'
+    maxRetries 3
 
     input:
     tuple val(sample_id), path(background_fq)
@@ -40,6 +41,7 @@ process SPIKE_PAIRED_READS {
     label 'process_low'
     tag "${sample_id}"
     container 'community.wave.seqera.io/library/pyfastx_pandas_pip_plotly:ce47640d3d5148f3'
+    maxRetries 3
     
     input:
     tuple val(sample_id), path(background_reads)

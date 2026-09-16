@@ -17,6 +17,7 @@ process SINGLE_REFERENCE_REMOVAL {
     label 'process_medium'
     maxForks 10
     tag "${sample_id}"
+    maxRetries 3
     // Sample sequence with references removed -- both the fastq and its
     // json summary are wanted, so no pattern restriction is needed.
     publishDir "${params.outdir}/removal/${sample_id}", mode: params.publish_dir_mode
@@ -59,6 +60,7 @@ process SINGLE_SAMPLE_REMOVAL {
     label 'process_medium'
     maxForks 10
     tag "${sample_id}"
+    maxRetries 3
     // Removed-reference sequences -- only the fastq is wanted here, not
     // its json summary, so restrict publishing to that one file. (just an inverse of the reference removal json)
     publishDir "${params.outdir}/removal/${sample_id}", mode: params.publish_dir_mode,
@@ -103,6 +105,7 @@ process PAIRED_REFERENCE_REMOVAL {
     label 'process_medium'
     maxForks 10
     tag "${sample_id}"
+    maxRetries 3
     publishDir "${params.outdir}/removal/${sample_id}", mode: params.publish_dir_mode
 
     input:
@@ -144,7 +147,8 @@ process PAIRED_SAMPLE_REMOVAL {
     container 'community.wave.seqera.io/library/deacon:0.17.0--43cd5289edd1686c'
     label 'process_medium'
     maxForks 10
-    tag "${sample_id}"   
+    tag "${sample_id}"
+    maxRetries 3
     publishDir "${params.outdir}/removal/${sample_id}", mode: params.publish_dir_mode,
         pattern: "*.reference_reads.R{1,2}.fq.gz"
 
