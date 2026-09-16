@@ -20,7 +20,7 @@ process SINGLE_REFERENCE_REMOVAL {
     maxRetries 3
     // Sample sequence with references removed -- both the fastq and its
     // json summary are wanted, so no pattern restriction is needed.
-    publishDir "${params.outdir}/removal/${sample_id}", mode: params.publish_dir_mode
+    publishDir "${params.outdir}/removal/${sample_id}_single", mode: params.publish_dir_mode
 
     input:
     tuple val(sample_id), path(fastq_fp)
@@ -63,7 +63,7 @@ process SINGLE_SAMPLE_REMOVAL {
     maxRetries 3
     // Removed-reference sequences -- only the fastq is wanted here, not
     // its json summary, so restrict publishing to that one file. (just an inverse of the reference removal json)
-    publishDir "${params.outdir}/removal/${sample_id}", mode: params.publish_dir_mode,
+    publishDir "${params.outdir}/removal/${sample_id}_single", mode: params.publish_dir_mode,
         pattern: "*.reference_reads.fq.gz"
 
     input:
@@ -106,7 +106,7 @@ process PAIRED_REFERENCE_REMOVAL {
     maxForks 10
     tag "${sample_id}"
     maxRetries 3
-    publishDir "${params.outdir}/removal/${sample_id}", mode: params.publish_dir_mode
+    publishDir "${params.outdir}/removal/${sample_id}_paired", mode: params.publish_dir_mode
 
     input:
     tuple val(sample_id), path(fastq_r1_fp), path(fastq_r2_fp)
@@ -149,7 +149,7 @@ process PAIRED_SAMPLE_REMOVAL {
     maxForks 10
     tag "${sample_id}"
     maxRetries 3
-    publishDir "${params.outdir}/removal/${sample_id}", mode: params.publish_dir_mode,
+    publishDir "${params.outdir}/removal/${sample_id}_paired", mode: params.publish_dir_mode,
         pattern: "*.reference_reads.R{1,2}.fq.gz"
 
     input:
