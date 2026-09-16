@@ -21,16 +21,13 @@ workflow REFERENCE_REMOVAL{
 
     SAMPLES_SETUP.out.single_end
         .mix(SAMPLES_SETUP.out.paired_end)
-        .count()
-        .subscribe { n ->
-            if (n == 0) {
-                error "No samples found via --samplesheet or --sample_data_dir. Nothing to run reference removal on."
-            }
+        .ifEmpty {
+            error "No samples found via --samplesheet or --sample_data_dir. Nothing to run reference removal on."
         }
 
     FILTER_READS(
         SAMPLES_SETUP.out.single_end,
-        SAMPLES_SETUP.out.paired_end,
+        paired_flat_ch,
         RESOLVE_REFERENCE.out.ref_idx,
     )
 
