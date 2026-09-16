@@ -12,6 +12,8 @@ workflow FILTER_READS {
     main:
     // the one reference index to every sample rather than being consumed once
     def idx_ch = ref_idx
+    log.info " Spiekd Single Reads: ${spiked_single.view()}"
+    log.info " Spiekd Paired Reads: ${spiked_paired.view()}"
     SINGLE_REFERENCE_REMOVAL(spiked_single, idx_ch)
     SINGLE_SAMPLE_REMOVAL(spiked_single, idx_ch)
     PAIRED_REFERENCE_REMOVAL(spiked_paired, idx_ch)
