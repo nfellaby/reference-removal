@@ -99,18 +99,18 @@ workflow REFERENCE_VALIDATION{
     // // Run Reference Removal on Spiked samples
     FILTER_READS(spiked_single_ch, spiked_paired_ch, REFERENCE_PARSING.out.ref_idx)
    
-    // // --- Reporting: one VALIDATION_REPORT call per read type, since the ---
-    // // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
-    // // --- differ between long (single fastq) and paired (R1+R2 pair)        ---
-    // if (read_type in single_reads) {
-    //     VALIDATION_REPORT(
-    //         SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
-    //         REFERENCE_PARSING.out.ref_single_synth,
-    //         FILTER_READS.out.single_ref_only,
-    //         FILTER_READS.out.single_depleted,
-    //         'single',
-    //     )
-    // }
+    // --- Reporting: one VALIDATION_REPORT call per read type, since the ---
+    // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
+    // --- differ between long (single fastq) and paired (R1+R2 pair)        ---
+    if (read_type in single_reads) {
+        VALIDATION_REPORT(
+            SAMPLES_SETUP.out.single_end,           // background_truth, pre-spike
+            REFERENCE_PARSING.out.ref_single_synth,
+            FILTER_READS.out.single_ref_only,
+            FILTER_READS.out.single_depleted,
+            'single',
+        )
+    }
 
     // if (read_type in paired_reads) {
     //     VALIDATION_REPORT(
