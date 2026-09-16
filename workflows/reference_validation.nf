@@ -5,18 +5,17 @@ include { FILTER_READS      } from '../subworkflow/filter_reads'
 include { VALIDATION_REPORT as VALIDATION_REPORT_SINGLE; VALIDATION_REPORT as VALIDATION_REPORT_PAIRED } from '../subworkflow/report'
 
 def checkBackgroundPresent(ch, String label, boolean required) {
-    if (required) {
-         return ch.ifEmpty {
-             error "No ${label} background samples found to spike the synthetic reference into. Cannot proceed with read_type='${params.read_type}'. Supply matching background data, or change read_type."
-         }
-     } else {
-         ch.count().subscribe { n ->
-             if (n == 0) {
-                 log.warn "No ${label} background samples found to spike the synthetic reference into. Skipping ${label} validation; continuing with what is available."
-             }
-         }
-         return ch
+    ch.count().subscribe { n ->
+        if (n == 0) {
+            def msg = "No ${label} background samples found to spike the synthetic reference into."
+            if (required) {
+                error "${msg} Cannot proceed with read_type='${params.read_type}'. Supply matching background data, or change read_type."
+            } else {
+                log.warn "${msg} Skipping ${label} validation; continuing with what is available."
+            }
+        }
     }
+    return ch
 }
 
 process SPIKE_SINGLE_READS {
@@ -69,7 +68,7 @@ workflow REFERENCE_VALIDATION{
     main:
     def single_reads  = ['single', 'both']
     def paired_reads = ['paired', 'both']
-    def strict_both = !(params.allow_partial_validation ?: true)
+    def strict_both = !(params.allow_partial_validation ?: false)
 
     // Either use existing index file or generate new one from fasta
     REFERENCE_PARSING(fasta, idx, read_type)
