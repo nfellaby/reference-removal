@@ -34,6 +34,7 @@ workflow {
             exit(1, "Reference removal requires exactly one of --samplesheet or --sample_data_dir")
         }
         log.info "Running reference removal with ${params.fasta ?: params.idx}"
+        log.info "Note: --read_type is not used for plain reference removal -- single-end and paired-end samples are both auto-detected and processed regardless of what it's set to."
         REFERENCE_REMOVAL(params.fasta, params.idx, params.samplesheet, params.sample_data_dir)
     }
 }
