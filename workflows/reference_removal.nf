@@ -19,6 +19,10 @@ workflow REFERENCE_REMOVAL{
     // so any value is fine here; 'both' is just the clearest to read.
     SAMPLES_SETUP(samplesheet_fp, sample_data_dir, 'both')
 
+    // Reshape the paired end reads channel
+    def paired_flat_ch = SAMPLES_SETUP.out.paired_end
+        .map { sample_id, reads -> tuple(sample_id, reads[0], reads[1]) }
+
     SAMPLES_SETUP.out.single_end
         .mix(SAMPLES_SETUP.out.paired_end)
         .ifEmpty {
