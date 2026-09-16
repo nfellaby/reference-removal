@@ -21,7 +21,7 @@ workflow REFERENCE_PARSING{
     } else {
         log.info "Generating Deacon index file from FASTA: ${fasta_fp}"
         GENERATE_IDX(fasta_fp, ref_id)
-        ref_idx = GENERATE_IDX.out.ref_idx
+        ref_idx = GENERATE_IDX.out.ref_idx.first()
 
         ref_idx.subscribe { idx ->
             idx_simp = file(idx).baseName
@@ -37,7 +37,7 @@ workflow REFERENCE_PARSING{
 
     if (read_type  in  single_reads){
         SINGLE_SYNTH_READS(fasta_fp, ref_id)
-        ref_single_synth = SINGLE_SYNTH_READS.out.ref_single_synth
+        ref_single_synth = SINGLE_SYNTH_READS.out.ref_single_synth.first()
 
         ref_single_synth.subscribe { single_ref ->
             log.info "Generated synthetic reference single reads: ${single_ref}"
@@ -45,7 +45,7 @@ workflow REFERENCE_PARSING{
     }
     if (read_type  in  paired_reads){
         PAIRED_SYNTH_READS(fasta_fp, ref_id)
-        ref_paired_synth = PAIRED_SYNTH_READS.out.ref_paired_synth
+        ref_paired_synth = PAIRED_SYNTH_READS.out.ref_paired_synth.first()
 
         ref_paired_synth.subscribe { paired_ref ->
             log.info "Generated synthetic reference paired reads: ${paired_ref.join(', ')}"
