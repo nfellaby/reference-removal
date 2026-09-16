@@ -83,14 +83,14 @@ workflow REFERENCE_VALIDATION{
         // 'both'        → required unless the user opted into partial validation
         def required = (read_type == 'paired') || (read_type == 'both' && strict_both)
         def paired_ch = checkBackgroundPresent(SAMPLES_SETUP.out.paired_end, 'paired-end (short-read)', required)
-        SPIKE_PAIRED_READS(paired_ch, REFERENCE_PARSING.out.ref_paired_synth.first())
+        SPIKE_PAIRED_READS(paired_ch, REFERENCE_PARSING.out.ref_paired_synth)
         spiked_paired_ch = SPIKE_PAIRED_READS.out.spiked
     }
 
     if (read_type in single_reads) {
         def required = (read_type == 'single') || (read_type == 'both' && strict_both)
         def single_ch = checkBackgroundPresent(SAMPLES_SETUP.out.single_end, 'single-end (long-read)', required)
-        SPIKE_SINGLE_READS(single_ch, REFERENCE_PARSING.out.ref_single_synth.first())
+        SPIKE_SINGLE_READS(single_ch, REFERENCE_PARSING.out.ref_single_synth)
         spiked_single_ch = SPIKE_SINGLE_READS.out.spiked
     }
 
