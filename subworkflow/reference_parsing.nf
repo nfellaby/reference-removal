@@ -37,7 +37,7 @@ workflow REFERENCE_PARSING{
 
     if (read_type  in  single_reads){
         SINGLE_SYNTH_READS(fasta_fp, ref_id)
-        ref_single_synth = SINGLE_SYNTH_READS.out.ref_single_synth.first()
+        ref_single_synth = SINGLE_SYNTH_READS.out.ref_single_synth
 
         ref_single_synth.subscribe { single_ref ->
             log.info "Generated synthetic reference single reads: ${single_ref}"
