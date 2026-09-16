@@ -95,7 +95,7 @@ workflow REFERENCE_VALIDATION{
     }
 
     // // Run Reference Removal on Spiked samples
-    // FILTER_READS(spiked_single_ch, spiked_paired_ch, REFERENCE_PARSING.out.ref_idx)
+    FILTER_READS(spiked_single_ch, spiked_paired_ch, REFERENCE_PARSING.out.ref_idx)
    
     // // --- Reporting: one VALIDATION_REPORT call per read type, since the ---
     // // --- underlying (background_truth, isolate_out, depleted_out) shapes  ---
