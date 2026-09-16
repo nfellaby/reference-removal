@@ -5,7 +5,7 @@ include { FILTER_READS      } from '../subworkflow/filter_reads'
 include { VALIDATION_REPORT as VALIDATION_REPORT_SINGLE; VALIDATION_REPORT as VALIDATION_REPORT_PAIRED } from '../subworkflow/report'
 
 def checkBackgroundPresent(ch, String label, boolean required) {
-    if !(required) {
+    if (required) {
          return ch.ifEmpty {
              error "No ${label} background samples found to spike the synthetic reference into. Cannot proceed with read_type='${params.read_type}'. Supply matching background data, or change read_type."
          }
@@ -69,7 +69,7 @@ workflow REFERENCE_VALIDATION{
     main:
     def single_reads  = ['single', 'both']
     def paired_reads = ['paired', 'both']
-    def strict_both = !(params.allow_partial_validation ?: false)
+    def strict_both = !(params.allow_partial_validation ?: true)
 
     // Either use existing index file or generate new one from fasta
     REFERENCE_PARSING(fasta, idx, read_type)
